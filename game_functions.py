@@ -78,43 +78,47 @@ def check_events(stats, joystick_zero, joystick_one):
                 if joystick.get_button(7) == 1:
                     stats.game_active = True
 
-# pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
 def update_cars(stats, joystick_zero, joystick_one):
+    # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
     key = pygame.key.get_pressed()
-
     if key[pygame.K_w] == 1:
-        road.rect_left.y += settings.speed_car_red
-        car_green.rect_mirror.y += settings.speed_car_red
-        car_red.rect_mirror.y -= settings.speed_car_red
+        settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
     if key[pygame.K_a] == 1:
-        car_red.rect_origin.x -= car_red.settings.speed_car_red
-        car_red.rect_mirror.x -= car_red.settings.speed_car_red
+        car_red.rect_origin.x -= settings.speed_car_red
+        car_red.rect_mirror.x -= settings.speed_car_red
     if key[pygame.K_d] == 1:
-        car_red.rect_origin.x += car_red.settings.speed_car_red
-        car_red.rect_mirror.x += car_red.settings.speed_car_red
-
+        car_red.rect_origin.x += settings.speed_car_red
+        car_red.rect_mirror.x += settings.speed_car_red
     if key[pygame.K_UP] == 1:
-        road.rect_right.y += settings.speed_car_green
-        car_red.rect_mirror.y += settings.speed_car_green
-        car_green.rect_mirror.y -= settings.speed_car_green
+        settings.speed_car_green = min(settings.speed_car_green + settings.sf_car_green, settings.max_speed_car_green)
     if key[pygame.K_LEFT] == 1:
-        car_green.rect_origin.x -= car_green.settings.speed_car_red
-        car_green.rect_mirror.x -= car_green.settings.speed_car_red
+        car_green.rect_origin.x -= settings.speed_car_green
+        car_green.rect_mirror.x -= settings.speed_car_green
     if key[pygame.K_RIGHT] == 1:
-        car_green.rect_origin.x += car_green.settings.speed_car_red
-        car_green.rect_mirror.x += car_green.settings.speed_car_red
+        car_green.rect_origin.x += settings.speed_car_green
+        car_green.rect_mirror.x += settings.speed_car_green
 
-    if joystick_zero:
-        if joystick_zero.get_axis(0) and joystick_zero.get_axis(0) > 0.2:
-            pass
-        if joystick_zero.get_axis(0) and joystick_zero.get_axis(0) < -0.2:
-            pass
-        if joystick_zero.get_axis(1) and joystick_zero.get_axis(1) < -0.2:
-            pass
-        if joystick_zero.get_axis(1) and joystick_zero.get_axis(1) > 0.2:
-            pass
-        if joystick_zero.get_axis(5) > 0.2 and settings.bullet_left > 0:
-            pass
+    road.rect_left.y += settings.speed_car_red
+    road.rect_right.y += settings.speed_car_green
+    car_green.rect_mirror.y = car_green.rect_mirror.y - settings.speed_car_green + settings.speed_car_red
+    car_red.rect_mirror.y = car_red.rect_mirror.y - settings.speed_car_red + settings.speed_car_green
+
+    if settings.speed_car_green > 0:
+        settings.speed_car_green = max(settings.speed_car_green - settings.bf_car_green, 0)
+    if settings.speed_car_red > 0:
+        settings.speed_car_red = max(settings.speed_car_red - settings.bf_car_red, 0)
+
+    # if joystick_zero:
+    #     if joystick_zero.get_axis(0) and joystick_zero.get_axis(0) > 0.2:
+    #         pass
+    #     if joystick_zero.get_axis(0) and joystick_zero.get_axis(0) < -0.2:
+    #         pass
+    #     if joystick_zero.get_axis(1) and joystick_zero.get_axis(1) < -0.2:
+    #         pass
+    #     if joystick_zero.get_axis(1) and joystick_zero.get_axis(1) > 0.2:
+    #         pass
+    #     if joystick_zero.get_axis(5) > 0.2 and settings.bullet_left > 0:
+    #         pass
 
 def update_rects():
     road.update()
