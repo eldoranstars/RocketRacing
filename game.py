@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 stats = stats.GameStats()
 
 while True:
-    clock.tick(30)
+    clock.tick(60)
     joystick_zero = pygame.joystick.Joystick(0) if pygame.joystick.get_count() else ''
     joystick_one = pygame.joystick.Joystick(1) if pygame.joystick.get_count() else ''
     gf.check_events(stats, joystick_zero, joystick_one)

@@ -5,21 +5,30 @@ class Road():
         self.settings = settings
         # Загрузка изображения и получение прямоугольника
         self.surface = settings.road_surface
-        self.rect_left = self.surface.get_rect()
-        self.rect_right = self.surface.get_rect()
+        self.rect_left_one = self.surface.get_rect()
+        self.rect_right_one = self.surface.get_rect()
+        self.rect_left_two = self.surface.get_rect()
+        self.rect_right_two = self.surface.get_rect()
         # Получение начальных координат изображения
-        self.rect_left.bottomleft = screen.rect.bottomleft
-        self.rect_right.bottomright = screen.rect.bottomright
+        self.rect_left_one.bottomleft = screen.rect.bottomleft
+        self.rect_right_one.bottomright = screen.rect.bottomright
+        self.rect_left_two.bottomleft = self.rect_left_one.topleft
+        self.rect_right_two.bottomright = self.rect_right_one.topright
 
+    # Меняем изображения местами, для непрерывной прокрутки дороги
     def update(self):
-        if not self.rect_left.collidepoint(self.screen.rect.topleft):
-            self.rect_left.bottomleft = self.screen.rect.bottomleft
-        # баг, почему то self.rect_right.topright всегда меньше self.screen.rect.topright на 1 по оси Х
-        # if not self.rect_right.collidepoint(self.screen.rect.topright):
-        if not self.rect_right.collidepoint(self.screen.rect.width - 1, 0):
-            self.rect_right.bottomright = self.screen.rect.bottomright
+        if self.rect_left_one.top > self.screen.rect.bottom:
+            self.rect_left_one.bottom = self.rect_left_two.top
+        if self.rect_left_two.top > self.screen.rect.bottom:
+            self.rect_left_two.bottom = self.rect_left_one.top
+        if self.rect_right_one.top > self.screen.rect.bottom:
+            self.rect_right_one.bottom = self.rect_right_two.top
+        if self.rect_right_two.top > self.screen.rect.bottom:
+            self.rect_right_two.bottom = self.rect_right_one.top
 
     # Вывод изображения на экран
     def blitme(self):
-        self.screen.surface.blit(self.surface, self.rect_left)
-        self.screen.surface.blit(self.surface, self.rect_right)
+        self.screen.surface.blit(self.surface, self.rect_left_one)
+        self.screen.surface.blit(self.surface, self.rect_left_two)
+        self.screen.surface.blit(self.surface, self.rect_right_one)
+        self.screen.surface.blit(self.surface, self.rect_right_two)

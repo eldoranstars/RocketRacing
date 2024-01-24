@@ -37,5 +37,5 @@ class Settings():
         self.sf_car_green = 1
         self.speed_car_red = 0
         self.speed_car_green = 0
-        self.max_speed_car_red = 7
-        self.max_speed_car_green = 7
+        self.max_speed_car_red = 10
+        self.max_speed_car_green = 10

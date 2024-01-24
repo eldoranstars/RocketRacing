@@ -98,8 +98,10 @@ def update_cars(stats, joystick_zero, joystick_one):
         car_green.rect_origin.x += settings.speed_car_green
         car_green.rect_mirror.x += settings.speed_car_green
 
-    road.rect_left.y += settings.speed_car_red
-    road.rect_right.y += settings.speed_car_green
+    road.rect_left_one.y += settings.speed_car_red
+    road.rect_right_one.y += settings.speed_car_green
+    road.rect_left_two.y += settings.speed_car_red
+    road.rect_right_two.y += settings.speed_car_green
     car_green.rect_mirror.y = car_green.rect_mirror.y - settings.speed_car_green + settings.speed_car_red
     car_red.rect_mirror.y = car_red.rect_mirror.y - settings.speed_car_red + settings.speed_car_green
 
