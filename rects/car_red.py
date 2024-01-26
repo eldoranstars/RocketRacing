@@ -13,6 +13,10 @@ class CarRed():
         self.rect_mirror.centery = screen.rect.centery
         self.rect_mirror.centerx = screen.rect.centerx + screen.rect.centerx / 2
 
+    # Учитываем торможение
+    def update(self):
+        self.settings.speed_car_red = max(self.settings.speed_car_red - self.settings.bf_car_red, 0)
+
     # Вывод изображения на экран
     def blitme(self):
         self.screen.surface.blit(self.surface, self.rect_origin)

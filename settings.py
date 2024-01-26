@@ -31,10 +31,10 @@ class Settings():
 
     # Сбросить параметры для новой игры
     def new_game(self):
-        self.bf_car_red = 0.2
-        self.bf_car_green = 0.2
-        self.sf_car_red = 1
-        self.sf_car_green = 1
+        self.bf_car_red = 0.1
+        self.bf_car_green = 0.1
+        self.sf_car_red = 0.3
+        self.sf_car_green = 0.3
         self.speed_car_red = 0
         self.speed_car_green = 0
         self.max_speed_car_red = 10
