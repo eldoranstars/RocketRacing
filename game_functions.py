@@ -7,6 +7,7 @@ from settings import Settings
 from screen import Screen
 from text import Text
 from road import Road
+from oil import Oil
 from car_red import CarRed
 from car_green import CarGreen
 
@@ -83,49 +84,34 @@ def update_cars(stats, joystick_zero, joystick_one):
     key = pygame.key.get_pressed()
     if key[pygame.K_w] == 1:
         settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
-    if key[pygame.K_a] == 1:
+    if key[pygame.K_a] == 1 and car_red.rect_origin.left > screen.rect.left:
         car_red.rect_origin.x -= (round(settings.speed_car_red) / 2)
         car_red.rect_mirror.x -= (round(settings.speed_car_red) / 2)
-    if key[pygame.K_d] == 1:
+    if key[pygame.K_d] == 1 and car_red.rect_mirror.right < screen.rect.right:
         car_red.rect_origin.x += (round(settings.speed_car_red) / 2)
         car_red.rect_mirror.x += (round(settings.speed_car_red) / 2)
     if key[pygame.K_UP] == 1:
         settings.speed_car_green = min(settings.speed_car_green + settings.sf_car_green, settings.max_speed_car_green)
-    if key[pygame.K_LEFT] == 1:
+    if key[pygame.K_LEFT] == 1 and car_green.rect_mirror.left > screen.rect.left:
         car_green.rect_origin.x -= (round(settings.speed_car_green) / 2)
         car_green.rect_mirror.x -= (round(settings.speed_car_green) / 2)
-    if key[pygame.K_RIGHT] == 1:
+    if key[pygame.K_RIGHT] == 1 and car_green.rect_origin.right < screen.rect.right:
         car_green.rect_origin.x += (round(settings.speed_car_green) / 2)
         car_green.rect_mirror.x += (round(settings.speed_car_green) / 2)
     # перемещаем объекты исходя из значений скорости
+    for oil in settings.oils:
+        oil.rect_left.y += round(settings.speed_car_red)
+        oil.rect_right.y += round(settings.speed_car_green)
+        oil.update()
     road.rect_left_one.y += round(settings.speed_car_red)
     road.rect_left_two.y += round(settings.speed_car_red)
     road.rect_right_one.y += round(settings.speed_car_green)
     road.rect_right_two.y += round(settings.speed_car_green)
+    settings.distance_car_red += round(settings.speed_car_red)
+    settings.distance_car_green += round(settings.speed_car_green)
+    settings.distance_car_offset = abs(settings.distance_car_red - settings.distance_car_green)
     car_green.rect_mirror.y = car_green.rect_mirror.y - round(settings.speed_car_green) + round(settings.speed_car_red)
     car_red.rect_mirror.y = car_red.rect_mirror.y - round(settings.speed_car_red) + round(settings.speed_car_green)
-    # учитываем торможение
-    # if settings.speed_car_green > 0:
-    #     settings.speed_car_green = max(settings.speed_car_green - settings.bf_car_green, 0)
-    # if settings.speed_car_red > 0:
-    #     settings.speed_car_red = max(settings.speed_car_red - settings.bf_car_red, 0)
-    # вычисляем ускорение на разных скоросятх
-    # if settings.speed_car_red > 10:
-    #     settings.sf_car_red = 0.21
-    # elif settings.speed_car_red > 5:
-    #     settings.sf_car_red = 0.5
-    # elif settings.speed_car_red > 2:
-    #     settings.sf_car_red = 0.8
-    # else:
-    #     settings.sf_car_red = 0.3
-    # if settings.speed_car_green > 10:
-    #     settings.sf_car_green = 0.21
-    # elif settings.speed_car_green > 5:
-    #     settings.sf_car_green = 0.5
-    # elif settings.speed_car_green > 2:
-    #     settings.sf_car_green = 0.8
-    # else:
-    #     settings.sf_car_green = 0.3
 
     # if joystick_zero:
     #     if joystick_zero.get_axis(0) and joystick_zero.get_axis(0) > 0.2:
@@ -144,10 +130,18 @@ def update_rects():
     car_red.update()
     car_green.update()
 
+# Создание объектов в списке
+def append_oil():
+    if random.randrange(0,100) == 0 and len(settings.oils) <5:
+        oil = Oil(screen, settings)
+        settings.oils.append(oil)
+
 # Вывод изображений на экран.
 def blit_screen(stats):
     screen.blitme()
     road.blitme()
+    for oil in settings.oils:
+        oil.blitme()
     car_red.blitme()
     car_green.blitme()
     if not stats.game_active:
