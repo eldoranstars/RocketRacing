@@ -7,6 +7,7 @@ from settings import Settings
 from screen import Screen
 from text import Text
 from road import Road
+from position import Position
 from oil import Oil
 from car_red import CarRed
 from car_green import CarGreen
@@ -14,16 +15,24 @@ from car_green import CarGreen
 settings = Settings()
 screen = Screen(settings)
 road = Road(screen, settings)
+position = Position(screen, settings)
 car_red = CarRed(screen, settings)
 car_green = CarGreen(screen, settings)
 pause = Text(screen, "PAUSE: P or Start button", screen.rect.centerx, screen.rect.centery)
 buttons = [pause]
 
 # Получаем пиксельную маску для обработки коллизий.
-def overlap(player, enemy):
+def overlap_left(player, enemy):
     player.mask = pygame.mask.from_surface(player.surface)
     enemy.mask = pygame.mask.from_surface(enemy.surface)
-    overlap = player.mask.overlap(enemy.mask, (enemy.rect.left - player.rect.left, enemy.rect.top - player.rect.top))
+    overlap = player.mask.overlap(enemy.mask, (enemy.rect_left.left - player.rect_origin.left, enemy.rect_left.top - player.rect_origin.top))
+    return overlap
+
+# Получаем пиксельную маску для обработки коллизий.
+def overlap_right(player, enemy):
+    player.mask = pygame.mask.from_surface(player.surface)
+    enemy.mask = pygame.mask.from_surface(enemy.surface)
+    overlap = player.mask.overlap(enemy.mask, (enemy.rect_right.left - player.rect_origin.left, enemy.rect_right.top - player.rect_origin.top))
     return overlap
 
 def collision(self, rect, wm, hm):
@@ -100,6 +109,10 @@ def update_cars(stats, joystick_zero, joystick_one):
         car_green.rect_mirror.x += (round(settings.speed_car_green) / 2)
     # перемещаем объекты исходя из значений скорости
     for oil in settings.oils:
+        if overlap_left(car_red, oil):
+            settings.speed_car_red = max(settings.speed_car_red / 2, 1)
+        if overlap_right(car_green, oil):
+            settings.speed_car_green = max(settings.speed_car_red / 2, 1)
         oil.rect_left.y += round(settings.speed_car_red)
         oil.rect_right.y += round(settings.speed_car_green)
         oil.update()
@@ -129,6 +142,7 @@ def update_rects():
     road.update()
     car_red.update()
     car_green.update()
+    position.update()
 
 # Создание объектов в списке
 def append_oil():
@@ -140,6 +154,7 @@ def append_oil():
 def blit_screen(stats):
     screen.blitme()
     road.blitme()
+    position.blitme()
     for oil in settings.oils:
         oil.blitme()
     car_red.blitme()

@@ -14,13 +14,16 @@ class Settings():
         self.screen_width = 1920
         self.screen_height = 1200
         self.screen_color = (100, 100, 100)
+        self.car_red_color = (255, 0, 0)
+        self.car_green_color = (0, 255, 0)
         # Параметры изображений
         self.road_surface = pygame.image.load(resource_path('media/road.jpg'))
         self.oil_surface = pygame.image.load(resource_path('media/oil.png'))
         self.car_red_surface = pygame.image.load(resource_path('media/car_red.png'))
         self.car_green_surface = pygame.image.load(resource_path('media/car_green.png'))
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
-        self.midline_surface = pygame.Surface((self.screen_height / 100, self.screen_height))
+        self.position_red_surface = pygame.Surface((20, 20))
+        self.position_green_surface = pygame.Surface((20, 20))
         # Параметры аудио
         # self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
         # self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
