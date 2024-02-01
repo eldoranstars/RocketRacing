@@ -6,15 +6,13 @@ class Position():
         # Загрузка изображения и получение прямоугольника
         self.surface_left = settings.position_red_surface
         self.surface_right = settings.position_green_surface
-        self.surface_left.fill(self.settings.car_red_color)
-        self.surface_right.fill(self.settings.car_green_color)
         self.rect_left = self.surface_left.get_rect()
         self.rect_right = self.surface_right.get_rect()
         # Получение начальных координат изображения
         self.rect_left.bottom = screen.rect.bottom
         self.rect_right.bottom = screen.rect.bottom
-        self.rect_left.x = screen.rect.centerx - 20
-        self.rect_right.x = screen.rect.centerx + 20
+        self.rect_left.x = screen.rect.centerx - 15
+        self.rect_right.x = screen.rect.centerx + 15
 
     # двигаемся к финишу
     def update(self):

@@ -19,16 +19,17 @@ class Settings():
         # Параметры изображений
         self.road_surface = pygame.image.load(resource_path('media/road.jpg'))
         self.oil_surface = pygame.image.load(resource_path('media/oil.png'))
+        self.oil_surface = pygame.transform.scale(self.oil_surface, (85,50))
         self.car_red_surface = pygame.image.load(resource_path('media/car_red.png'))
+        self.car_red_surface = pygame.transform.scale(self.car_red_surface, (51,51))
         self.car_green_surface = pygame.image.load(resource_path('media/car_green.png'))
+        self.car_green_surface = pygame.transform.scale(self.car_green_surface, (51,51))
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
-        self.position_red_surface = pygame.Surface((20, 20))
-        self.position_green_surface = pygame.Surface((20, 20))
+        self.position_red_surface = pygame.transform.scale(self.car_red_surface, (25,25))
+        self.position_green_surface = pygame.transform.scale(self.car_green_surface, (25,25))
         # Параметры аудио
         # self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
         # self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
-        # Параметры игры
-        self.oil_allowed = 5
         # Динамические параметры игры
         self.new_game()
 
@@ -45,4 +46,5 @@ class Settings():
         self.distance_car_red = 0
         self.distance_car_green = 0
         self.distance_car_offset = 0
+        self.oil_chance_increment = 0
         self.oils = []

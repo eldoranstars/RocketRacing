@@ -107,24 +107,6 @@ def update_cars(stats, joystick_zero, joystick_one):
     if key[pygame.K_RIGHT] == 1 and car_green.rect_origin.right < screen.rect.right:
         car_green.rect_origin.x += (round(settings.speed_car_green) / 2)
         car_green.rect_mirror.x += (round(settings.speed_car_green) / 2)
-    # перемещаем объекты исходя из значений скорости
-    for oil in settings.oils:
-        if overlap_left(car_red, oil):
-            settings.speed_car_red = max(settings.speed_car_red / 2, 1)
-        if overlap_right(car_green, oil):
-            settings.speed_car_green = max(settings.speed_car_red / 2, 1)
-        oil.rect_left.y += round(settings.speed_car_red)
-        oil.rect_right.y += round(settings.speed_car_green)
-        oil.update()
-    road.rect_left_one.y += round(settings.speed_car_red)
-    road.rect_left_two.y += round(settings.speed_car_red)
-    road.rect_right_one.y += round(settings.speed_car_green)
-    road.rect_right_two.y += round(settings.speed_car_green)
-    settings.distance_car_red += round(settings.speed_car_red)
-    settings.distance_car_green += round(settings.speed_car_green)
-    settings.distance_car_offset = abs(settings.distance_car_red - settings.distance_car_green)
-    car_green.rect_mirror.y = car_green.rect_mirror.y - round(settings.speed_car_green) + round(settings.speed_car_red)
-    car_red.rect_mirror.y = car_red.rect_mirror.y - round(settings.speed_car_red) + round(settings.speed_car_green)
 
     # if joystick_zero:
     #     if joystick_zero.get_axis(0) and joystick_zero.get_axis(0) > 0.2:
@@ -139,16 +121,37 @@ def update_cars(stats, joystick_zero, joystick_one):
     #         pass
 
 def update_rects():
+    # перемещаем объекты исходя из значений скорости
     road.update()
     car_red.update()
     car_green.update()
     position.update()
+    road.rect_left_one.y += round(settings.speed_car_red)
+    road.rect_left_two.y += round(settings.speed_car_red)
+    road.rect_right_one.y += round(settings.speed_car_green)
+    road.rect_right_two.y += round(settings.speed_car_green)
+    settings.distance_car_red += round(settings.speed_car_red)
+    settings.distance_car_green += round(settings.speed_car_green)
+    settings.distance_car_offset = abs(settings.distance_car_red - settings.distance_car_green)
+    car_green.rect_mirror.y = car_green.rect_mirror.y - round(settings.speed_car_green) + round(settings.speed_car_red)
+    car_red.rect_mirror.y = car_red.rect_mirror.y - round(settings.speed_car_red) + round(settings.speed_car_green)
+    for oil in settings.oils:
+        if overlap_left(car_red, oil):
+            settings.speed_car_red = max(settings.speed_car_red / 2, 1)
+        if overlap_right(car_green, oil):
+            settings.speed_car_green = max(settings.speed_car_red / 2, 1)
+        oil.rect_left.y += round(settings.speed_car_red)
+        oil.rect_right.y += round(settings.speed_car_green)
+        oil.update()
 
 # Создание объектов в списке
 def append_oil():
-    if random.randrange(0,100) == 0 and len(settings.oils) <5:
+    oil_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.oil_chance_increment) / 100
+    print(oil_chance_to_appear)
+    if random.randrange(0,100) < oil_chance_to_appear:
         oil = Oil(screen, settings)
         settings.oils.append(oil)
+        settings.oil_chance_increment += 1000
 
 # Вывод изображений на экран.
 def blit_screen(stats):

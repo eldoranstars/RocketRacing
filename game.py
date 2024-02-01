@@ -16,6 +16,6 @@ while True:
     gf.check_events(stats, joystick_zero, joystick_one)
     gf.blit_screen(stats)
     if stats.game_active:
-        gf.update_rects()
         gf.update_cars(stats, joystick_zero, joystick_one)
+        gf.update_rects()
         gf.append_oil()
