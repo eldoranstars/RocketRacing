@@ -18,4 +18,5 @@ while True:
     if stats.game_active:
         gf.update_cars(stats, joystick_zero, joystick_one)
         gf.update_rects()
+        gf.remove_rects()
         gf.append_oil()

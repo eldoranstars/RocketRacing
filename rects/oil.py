@@ -20,7 +20,7 @@ class Oil():
             self.rect_right.bottom = 0
 
     # Чистим список
-    def update(self):
+    def remove(self):
         # self.rect_left.y += round(self.settings.speed_car_red)
         # self.rect_right.y += round(self.settings.speed_car_green)
         if self.rect_left.top > self.screen.rect.bottom:

@@ -35,7 +35,7 @@ def overlap_right(player, enemy):
     overlap = player.mask.overlap(enemy.mask, (enemy.rect_right.left - player.rect_origin.left, enemy.rect_right.top - player.rect_origin.top))
     return overlap
 
-def collision(self, rect, wm, hm):
+def collision(rect, wm, hm):
     # Получаем дополнительный прямоугольник для обработки коллизий.
     collision = pygame.Rect(rect.center, (rect.width * wm, rect.height * hm))
     collision.center = rect.center
@@ -120,8 +120,8 @@ def update_cars(stats, joystick_zero, joystick_one):
     #     if joystick_zero.get_axis(5) > 0.2 and settings.bullet_left > 0:
     #         pass
 
+# перемещаем объекты исходя из значений скорости
 def update_rects():
-    # перемещаем объекты исходя из значений скорости
     road.update()
     car_red.update()
     car_green.update()
@@ -136,22 +136,25 @@ def update_rects():
     car_green.rect_mirror.y = car_green.rect_mirror.y - round(settings.speed_car_green) + round(settings.speed_car_red)
     car_red.rect_mirror.y = car_red.rect_mirror.y - round(settings.speed_car_red) + round(settings.speed_car_green)
     for oil in settings.oils:
-        if overlap_left(car_red, oil):
-            settings.speed_car_red = max(settings.speed_car_red / 2, 1)
-        if overlap_right(car_green, oil):
-            settings.speed_car_green = max(settings.speed_car_red / 2, 1)
         oil.rect_left.y += round(settings.speed_car_red)
         oil.rect_right.y += round(settings.speed_car_green)
-        oil.update()
+        if overlap_left(car_red, oil):
+            settings.speed_car_red = 1
+        if overlap_right(car_green, oil):
+            settings.speed_car_green = 1
 
 # Создание объектов в списке
 def append_oil():
     oil_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.oil_chance_increment) / 100
-    print(oil_chance_to_appear)
     if random.randrange(0,100) < oil_chance_to_appear:
         oil = Oil(screen, settings)
         settings.oils.append(oil)
         settings.oil_chance_increment += 1000
+
+# удаляем объекты из списков
+def remove_rects():
+    for oil in settings.oils:
+        oil.remove()
 
 # Вывод изображений на экран.
 def blit_screen(stats):
