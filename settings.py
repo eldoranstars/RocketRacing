@@ -21,17 +21,21 @@ class Settings():
         self.oil_surface = pygame.image.load(resource_path('media/oil.png'))
         self.oil_surface = pygame.transform.scale(self.oil_surface, (85,50))
         self.car_red_surface = pygame.image.load(resource_path('media/car_red.png'))
-        self.car_red_surface = pygame.transform.scale(self.car_red_surface, (51,51))
         self.car_green_surface = pygame.image.load(resource_path('media/car_green.png'))
+        self.car_red_surface = pygame.transform.scale(self.car_red_surface, (51,51))
         self.car_green_surface = pygame.transform.scale(self.car_green_surface, (51,51))
-        self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         self.position_red_surface = pygame.transform.scale(self.car_red_surface, (25,25))
         self.position_green_surface = pygame.transform.scale(self.car_green_surface, (25,25))
+        self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         # Параметры аудио
         # self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
         # self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
         # Динамические параметры игры
         self.new_game()
+
+    def update(self):
+        self.round_speed_car_red = round(self.speed_car_red)
+        self.round_speed_car_green = round(self.speed_car_green)
 
     # Сбросить параметры для новой игры
     def new_game(self):
@@ -41,6 +45,8 @@ class Settings():
         self.sf_car_green = 0.3
         self.speed_car_red = 0
         self.speed_car_green = 0
+        self.round_speed_car_red = 0
+        self.round_speed_car_green = 0
         self.max_speed_car_red = 22
         self.max_speed_car_green = 22
         self.distance_car_red = 0
