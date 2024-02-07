@@ -9,6 +9,8 @@ from text import Text
 from road import Road
 from position import Position
 from oil import Oil
+from tractor_move_right import RTractor
+from tractor_move_left import LTractor
 from car_red import CarRed
 from car_green import CarGreen
 
@@ -136,6 +138,14 @@ def update_rects():
     settings.distance_car_offset = abs(settings.distance_car_red - settings.distance_car_green)
     car_green.rect_mirror.y = car_green.rect_mirror.y - settings.round_speed_car_green + settings.round_speed_car_red
     car_red.rect_mirror.y = car_red.rect_mirror.y - settings.round_speed_car_red + settings.round_speed_car_green
+    for tractor in settings.tractors_move_right:
+        tractor.rect_left.y += settings.round_speed_car_red
+        tractor.rect_right.y += settings.round_speed_car_green
+        tractor.update()
+    for tractor in settings.tractors_move_left:
+        tractor.rect_left.y += settings.round_speed_car_red
+        tractor.rect_right.y += settings.round_speed_car_green
+        tractor.update()
     for oil in settings.oils:
         oil.rect_left.y += settings.round_speed_car_red
         oil.rect_right.y += settings.round_speed_car_green
@@ -151,11 +161,24 @@ def append_rects():
         oil = Oil(screen, settings)
         settings.oils.append(oil)
         settings.oil_chance_increment += 1000
+    tractor_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.tractor_chance_increment) / 100
+    if random.randrange(0,100) < tractor_chance_to_appear:
+        tractor = RTractor(screen, settings)
+        settings.tractors_move_right.append(tractor)
+        settings.tractor_chance_increment += 1000
+    if random.randrange(0,100) < tractor_chance_to_appear:
+        tractor = LTractor(screen, settings)
+        settings.tractors_move_left.append(tractor)
+        settings.tractor_chance_increment += 1000
 
 # удаляем объекты из списков
 def remove_rects():
     for oil in settings.oils:
         oil.remove()
+    for tractor in settings.tractors_move_right:
+        tractor.remove()
+    for tractor in settings.tractors_move_left:
+        tractor.remove()
 
 # Вывод изображений на экран.
 def blit_screen(stats):
@@ -164,6 +187,10 @@ def blit_screen(stats):
     position.blitme()
     for oil in settings.oils:
         oil.blitme()
+    for tractor in settings.tractors_move_right:
+        tractor.blitme()
+    for tractor in settings.tractors_move_left:
+        tractor.blitme()
     car_red.blitme()
     car_green.blitme()
     if not stats.game_active:

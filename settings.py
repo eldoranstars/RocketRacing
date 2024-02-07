@@ -20,6 +20,20 @@ class Settings():
         self.road_surface = pygame.image.load(resource_path('media/road.jpg'))
         self.oil_surface = pygame.image.load(resource_path('media/oil.png'))
         self.oil_surface = pygame.transform.scale(self.oil_surface, (85,50))
+        self.tractor_ml1 = pygame.image.load(resource_path('media/tractor1.png'))
+        self.tractor_ml2 = pygame.image.load(resource_path('media/tractor2.png'))
+        self.tractor_ml3 = pygame.image.load(resource_path('media/tractor3.png'))
+        self.tractor_ml4 = pygame.image.load(resource_path('media/tractor4.png'))
+        self.tractor_ml1 = pygame.transform.scale(self.tractor_ml1, (61,49))
+        self.tractor_ml2 = pygame.transform.scale(self.tractor_ml2, (61,49))
+        self.tractor_ml3 = pygame.transform.scale(self.tractor_ml3, (61,49))
+        self.tractor_ml4 = pygame.transform.scale(self.tractor_ml4, (61,49))
+        self.tractor_mr1 = pygame.transform.flip(self.tractor_ml1, True, False)
+        self.tractor_mr2 = pygame.transform.flip(self.tractor_ml2, True, False)
+        self.tractor_mr3 = pygame.transform.flip(self.tractor_ml3, True, False)
+        self.tractor_mr4 = pygame.transform.flip(self.tractor_ml4, True, False)
+        self.tractor_ml = [self.tractor_ml1, self.tractor_ml2, self.tractor_ml3, self.tractor_ml4]
+        self.tractor_mr = [self.tractor_mr1, self.tractor_mr2, self.tractor_mr3, self.tractor_mr4]
         self.car_red_surface = pygame.image.load(resource_path('media/car_red.png'))
         self.car_green_surface = pygame.image.load(resource_path('media/car_green.png'))
         self.car_red_surface = pygame.transform.scale(self.car_red_surface, (51,51))
@@ -54,3 +68,6 @@ class Settings():
         self.distance_car_offset = 0
         self.oil_chance_increment = 0
         self.oils = []
+        self.tractor_chance_increment = 0
+        self.tractors_move_right = []
+        self.tractors_move_left = []
