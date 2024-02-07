@@ -93,7 +93,7 @@ def check_events(stats, joystick_zero, joystick_one):
 def update_cars(stats, joystick_zero, joystick_one):
     # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
     key = pygame.key.get_pressed()
-    if key[pygame.K_w] == 1:
+    if key[pygame.K_w] == 1 and not car_red.crash:
         settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
     if key[pygame.K_a] == 1 and car_red.rect_origin.left > screen.rect.left:
         car_red.rect_origin.x -= (settings.round_speed_car_red / 2)
@@ -101,7 +101,7 @@ def update_cars(stats, joystick_zero, joystick_one):
     if key[pygame.K_d] == 1 and car_red.rect_mirror.right < screen.rect.right:
         car_red.rect_origin.x += (settings.round_speed_car_red / 2)
         car_red.rect_mirror.x += (settings.round_speed_car_red / 2)
-    if key[pygame.K_UP] == 1:
+    if key[pygame.K_UP] == 1 and not car_green.crash:
         settings.speed_car_green = min(settings.speed_car_green + settings.sf_car_green, settings.max_speed_car_green)
     if key[pygame.K_LEFT] == 1 and car_green.rect_mirror.left > screen.rect.left:
         car_green.rect_origin.x -= (settings.round_speed_car_green / 2)
@@ -141,11 +141,21 @@ def update_rects():
     for tractor in settings.tractors_move_right:
         tractor.rect_left.y += settings.round_speed_car_red
         tractor.rect_right.y += settings.round_speed_car_green
-        tractor.update()
+        if overlap_left(car_red, tractor):
+            settings.speed_car_red = 0
+            car_red.crash = True
+        if overlap_right(car_green, tractor):
+            settings.speed_car_green = 0
+            car_green.crash = True
     for tractor in settings.tractors_move_left:
         tractor.rect_left.y += settings.round_speed_car_red
         tractor.rect_right.y += settings.round_speed_car_green
-        tractor.update()
+        if overlap_left(car_red, tractor):
+            settings.speed_car_red = 0
+            car_red.crash = True
+        if overlap_right(car_green, tractor):
+            settings.speed_car_green = 0
+            car_green.crash = True
     for oil in settings.oils:
         oil.rect_left.y += settings.round_speed_car_red
         oil.rect_right.y += settings.round_speed_car_green
@@ -176,8 +186,10 @@ def remove_rects():
     for oil in settings.oils:
         oil.remove()
     for tractor in settings.tractors_move_right:
+        tractor.update()
         tractor.remove()
     for tractor in settings.tractors_move_left:
+        tractor.update()
         tractor.remove()
 
 # Вывод изображений на экран.
