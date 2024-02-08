@@ -11,8 +11,8 @@ class LTractor():
         self.rect_left = self.surface.get_rect()
         self.rect_right = self.surface.get_rect()
         # Получение начальных координат изображения
-        self.rect_left.x = random.randrange(360, 720, self.rect_left.width)
-        self.rect_right.x = self.rect_left.x + 1200
+        self.rect_left.left = random.randrange(360, 720, self.rect_left.width)
+        self.rect_right.left = self.rect_left.left + 1200
         if settings.distance_car_red > settings.distance_car_green:
             self.rect_left.bottom = 0
             self.rect_right.bottom = - settings.distance_car_offset
@@ -21,8 +21,8 @@ class LTractor():
             self.rect_right.bottom = 0
 
     def update(self):
-            self.rect_left.x -= self.speed
-            self.rect_right.x -= self.speed
+            self.rect_left.left -= self.speed
+            self.rect_right.left -= self.speed
 
     def remove(self):
         if self.rect_left.centerx < 0:

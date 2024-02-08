@@ -10,8 +10,8 @@ class Oil():
         self.rect_left = self.surface.get_rect()
         self.rect_right = self.surface.get_rect()
         # Получение начальных координат изображения
-        self.rect_left.x = random.randrange(self.rect_left.width, 720 - self.rect_left.width)
-        self.rect_right.x = self.rect_left.x + 1200
+        self.rect_left.left = random.randrange(self.rect_left.width, 720 - self.rect_left.width)
+        self.rect_right.left = self.rect_left.left + 1200
         if settings.distance_car_red > settings.distance_car_green:
             self.rect_left.bottom = 0
             self.rect_right.bottom = - settings.distance_car_offset
