@@ -72,6 +72,8 @@ class Settings():
             self.fire32, self.fire33, self.fire34, self.fire35, self.fire36, self.fire37, self.fire38, self.fire39, \
             self.fire40, self.fire41, self.fire42, self.fire43, self.fire44, self.fire45, self.fire46, self.fire47]
         self.road_surface = pygame.image.load(resource_path('media/road.jpg'))
+        self.kran_surface = pygame.image.load(resource_path('media/oil.png'))
+        self.oil_surface = pygame.transform.scale(self.oil_surface, (85,50))
         self.oil_surface = pygame.image.load(resource_path('media/oil.png'))
         self.oil_surface = pygame.transform.scale(self.oil_surface, (85,50))
         self.tractor_ml1 = pygame.image.load(resource_path('media/tractor1.png'))
@@ -125,4 +127,4 @@ class Settings():
         self.tractor_chance_increment = 0
         self.tractors_move_right = []
         self.tractors_move_left = []
-        self.crash_reload = len(self.firelist)
+        self.crash_timer = len(self.firelist)

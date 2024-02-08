@@ -20,7 +20,7 @@ class CarRed():
 
     # Учитываем торможение
     def update(self):
-        if self.crash and self.crash_reload < self.settings.crash_reload:
+        if self.crash and self.crash_reload < self.settings.crash_timer:
             self.rect_fire_origin.center = self.rect_origin.center
             self.rect_fire_mirror.center = self.rect_mirror.center
             self.fire_surface = self.settings.firelist[self.crash_reload]

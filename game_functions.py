@@ -96,19 +96,19 @@ def update_cars(stats, joystick_zero, joystick_one):
     if key[pygame.K_w] == 1 and not car_red.crash:
         settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
     if key[pygame.K_a] == 1 and car_red.rect_origin.left > screen.rect.left:
-        car_red.rect_origin.x -= (settings.round_speed_car_red / 2)
-        car_red.rect_mirror.x -= (settings.round_speed_car_red / 2)
+        car_red.rect_origin.x -= round(settings.speed_car_red / 2)
+        car_red.rect_mirror.x -= round(settings.speed_car_red / 2)
     if key[pygame.K_d] == 1 and car_red.rect_mirror.right < screen.rect.right:
-        car_red.rect_origin.x += (settings.round_speed_car_red / 2)
-        car_red.rect_mirror.x += (settings.round_speed_car_red / 2)
+        car_red.rect_origin.x += round(settings.speed_car_red / 2)
+        car_red.rect_mirror.x += round(settings.speed_car_red / 2)
     if key[pygame.K_UP] == 1 and not car_green.crash:
         settings.speed_car_green = min(settings.speed_car_green + settings.sf_car_green, settings.max_speed_car_green)
     if key[pygame.K_LEFT] == 1 and car_green.rect_mirror.left > screen.rect.left:
-        car_green.rect_origin.x -= (settings.round_speed_car_green / 2)
-        car_green.rect_mirror.x -= (settings.round_speed_car_green / 2)
+        car_green.rect_origin.x -= round(settings.speed_car_green / 2)
+        car_green.rect_mirror.x -= round(settings.speed_car_green / 2)
     if key[pygame.K_RIGHT] == 1 and car_green.rect_origin.right < screen.rect.right:
-        car_green.rect_origin.x += (settings.round_speed_car_green / 2)
-        car_green.rect_mirror.x += (settings.round_speed_car_green / 2)
+        car_green.rect_origin.x += round(settings.speed_car_green / 2)
+        car_green.rect_mirror.x += round(settings.speed_car_green / 2)
 
     # if joystick_zero:
     #     if joystick_zero.get_axis(0) and joystick_zero.get_axis(0) > 0.2:
