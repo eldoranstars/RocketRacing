@@ -4,6 +4,8 @@ class CarRed():
         self.screen = screen
         self.settings = settings
         self.crash_reload = 0
+        self.nitro_reload = 0
+        self.nitro_timer = 0
         self.crash = False
         # Загрузка изображения и получение прямоугольника
         self.surface = settings.car_red_surface
@@ -20,6 +22,7 @@ class CarRed():
 
     # Учитываем торможение
     def update(self):
+        self.settings.speed_car_red = max(self.settings.speed_car_red - self.settings.bf_car_red, 0)
         if self.crash and self.crash_reload < self.settings.crash_timer:
             self.rect_fire_origin.center = self.rect_origin.center
             self.rect_fire_mirror.center = self.rect_mirror.center
@@ -29,7 +32,15 @@ class CarRed():
             self.fire_surface = self.settings.firelist[-1]
             self.crash_reload = 0
             self.crash = False
-            self.settings.speed_car_red = max(self.settings.speed_car_red - self.settings.bf_car_red, 0)
+        if self.nitro_reload < self.nitro_timer:
+            self.settings.max_speed_car_red = 33
+            self.settings.sf_car_red = 1
+            self.nitro_reload += 1
+        else:
+            self.settings.max_speed_car_red = 22
+            self.settings.sf_car_red = 0.3
+            self.nitro_reload = 0
+            self.nitro_timer = 0
 
     # Вывод изображения на экран
     def blitme(self):

@@ -11,8 +11,8 @@ class Position():
         # Получение начальных координат изображения
         self.rect_left.bottom = screen.rect.bottom
         self.rect_right.bottom = screen.rect.bottom
-        self.rect_left.left = screen.rect.centerx - 15
-        self.rect_right.left = screen.rect.centerx + 15
+        self.rect_left.centerx = screen.rect.centerx - 15
+        self.rect_right.centerx = screen.rect.centerx + 15
 
     # двигаемся к финишу
     def update(self):

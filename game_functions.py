@@ -9,6 +9,7 @@ from text import Text
 from road import Road
 from position import Position
 from oil import Oil
+from nitro import Nitro
 from tractor_move_right import RTractor
 from tractor_move_left import LTractor
 from car_red import CarRed
@@ -163,6 +164,15 @@ def update_rects():
             settings.speed_car_red = max(settings.speed_car_red / 2, 2)
         if overlap_right(car_green, oil):
             settings.speed_car_green = max(settings.speed_car_green / 2, 2)
+    for nitro in settings.nitros:
+        nitro.rect_left.top += settings.round_speed_car_red
+        nitro.rect_right.top += settings.round_speed_car_green
+        if overlap_left(car_red, nitro):
+            nitro.rdy_remove = True
+            car_red.nitro_timer += 60
+        if overlap_right(car_green, nitro):
+            nitro.rdy_remove = True
+            car_green.nitro_timer += 60
 
 # добавляем объекты в списки
 def append_rects():
@@ -180,11 +190,18 @@ def append_rects():
         tractor = LTractor(screen, settings)
         settings.tractors_move_left.append(tractor)
         settings.tractor_chance_increment += 1000
+    nitro_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.nitro_chance_increment) / 100
+    if random.randrange(0,100) < nitro_chance_to_appear:
+        nitro = Nitro(screen, settings)
+        settings.nitros.append(nitro)
+        settings.nitro_chance_increment += 1000
 
 # удаляем объекты из списков
 def remove_rects():
     for oil in settings.oils:
         oil.remove()
+    for nitro in settings.nitros:
+        nitro.remove()
     for tractor in settings.tractors_move_right:
         tractor.update()
         tractor.remove()
@@ -199,6 +216,8 @@ def blit_screen(stats):
     position.blitme()
     for oil in settings.oils:
         oil.blitme()
+    for nitro in settings.nitros:
+        nitro.blitme()
     for tractor in settings.tractors_move_right:
         tractor.blitme()
     for tractor in settings.tractors_move_left:
