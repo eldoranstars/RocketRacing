@@ -76,6 +76,8 @@ class Settings():
         self.oil_surface = pygame.transform.scale(self.oil_surface, (85,50))
         self.nitro_surface = pygame.image.load(resource_path('media/nitro.png'))
         self.nitro_surface = pygame.transform.scale(self.nitro_surface, (40,40))
+        self.truck_surface = pygame.image.load(resource_path('media/truck.png'))
+        self.truck_surface = pygame.transform.scale(self.truck_surface, (45,120))
         self.tractor_ml1 = pygame.image.load(resource_path('media/tractor1.png'))
         self.tractor_ml2 = pygame.image.load(resource_path('media/tractor2.png'))
         self.tractor_ml3 = pygame.image.load(resource_path('media/tractor3.png'))
@@ -125,8 +127,10 @@ class Settings():
         self.oil_chance_increment = 0
         self.oils = []
         self.nitros = []
+        self.trucks = []
         self.tractor_chance_increment = 0
         self.nitro_chance_increment = 0
+        self.truck_chance_increment = 0
         self.tractors_move_right = []
         self.tractors_move_left = []
         self.crash_timer = len(self.firelist)

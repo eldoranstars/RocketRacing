@@ -10,6 +10,7 @@ from road import Road
 from position import Position
 from oil import Oil
 from nitro import Nitro
+from truck import Truck
 from tractor_move_right import RTractor
 from tractor_move_left import LTractor
 from car_red import CarRed
@@ -173,6 +174,17 @@ def update_rects():
         if overlap_right(car_green, nitro):
             nitro.rdy_remove = True
             car_green.nitro_timer += 60
+    for truck in settings.trucks:
+        truck.rect_left.top += settings.round_speed_car_red
+        truck.rect_right.top += settings.round_speed_car_green
+        if overlap_left(car_red, truck):
+            settings.speed_car_red = 0
+            car_red.crash = True
+            truck.rdy_remove = True
+        if overlap_right(car_green, truck):
+            settings.speed_car_green = 0
+            car_green.crash = True
+            truck.rdy_remove = True
 
 # добавляем объекты в списки
 def append_rects():
@@ -194,7 +206,12 @@ def append_rects():
     if random.randrange(0,100) < nitro_chance_to_appear:
         nitro = Nitro(screen, settings)
         settings.nitros.append(nitro)
-        settings.nitro_chance_increment += 1000
+        settings.nitro_chance_increment += 2000
+    truck_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.truck_chance_increment) / 100
+    if random.randrange(0,100) < truck_chance_to_appear:
+        truck = Truck(screen, settings)
+        settings.trucks.append(truck)
+        settings.truck_chance_increment += 2000
 
 # удаляем объекты из списков
 def remove_rects():
@@ -202,6 +219,9 @@ def remove_rects():
         oil.remove()
     for nitro in settings.nitros:
         nitro.remove()
+    for truck in settings.trucks:
+        truck.update()
+        truck.remove()
     for tractor in settings.tractors_move_right:
         tractor.update()
         tractor.remove()
@@ -218,6 +238,8 @@ def blit_screen(stats):
         oil.blitme()
     for nitro in settings.nitros:
         nitro.blitme()
+    for truck in settings.trucks:
+        truck.blitme()
     for tractor in settings.tractors_move_right:
         tractor.blitme()
     for tractor in settings.tractors_move_left:
