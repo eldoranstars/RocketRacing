@@ -17,6 +17,10 @@ class Road():
 
     # Меняем изображения местами, для непрерывной прокрутки дороги
     def update(self):
+        self.rect_left_one.top += self.settings.round_speed_car_red
+        self.rect_left_two.top += self.settings.round_speed_car_red
+        self.rect_right_one.top += self.settings.round_speed_car_green
+        self.rect_right_two.top += self.settings.round_speed_car_green
         if self.rect_left_one.top > self.screen.rect.bottom:
             self.rect_left_one.bottom = self.rect_left_two.top
         if self.rect_left_two.top > self.screen.rect.bottom:

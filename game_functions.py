@@ -11,6 +11,7 @@ from position import Position
 from oil import Oil
 from nitro import Nitro
 from truck import Truck
+from finish import Finish
 from tractor_move_right import RTractor
 from tractor_move_left import LTractor
 from car_red import CarRed
@@ -19,6 +20,7 @@ from car_green import CarGreen
 settings = Settings()
 screen = Screen(settings)
 road = Road(screen, settings)
+finish = Finish(screen, settings)
 position = Position(screen, settings)
 car_red = CarRed(screen, settings)
 car_green = CarGreen(screen, settings)
@@ -76,6 +78,13 @@ def check_events(stats, joystick_zero, joystick_one):
                     pygame.display.toggle_fullscreen()
                 if event.key == pygame.K_p:
                     stats.game_active = True
+                    if stats.final_active:
+                        finish.new_game()
+                        position.new_game()
+                        car_red.new_game()
+                        car_green.new_game()
+                        settings.new_game()
+                        stats.final_active = False
             if event.type == pygame.JOYBUTTONDOWN:
                 if joystick.get_button(6) == 1:
                     pygame.quit()
@@ -131,13 +140,14 @@ def update_rects():
     car_red.update()
     car_green.update()
     position.update()
-    road.rect_left_one.top += settings.round_speed_car_red
-    road.rect_left_two.top += settings.round_speed_car_red
-    road.rect_right_one.top += settings.round_speed_car_green
-    road.rect_right_two.top += settings.round_speed_car_green
-    settings.distance_car_red += settings.round_speed_car_red
-    settings.distance_car_green += settings.round_speed_car_green
-    settings.distance_car_offset = abs(settings.distance_car_red - settings.distance_car_green)
+    finish.update()
+    # road.rect_left_one.top += settings.round_speed_car_red
+    # road.rect_left_two.top += settings.round_speed_car_red
+    # road.rect_right_one.top += settings.round_speed_car_green
+    # road.rect_right_two.top += settings.round_speed_car_green
+    # settings.distance_car_red += settings.round_speed_car_red
+    # settings.distance_car_green += settings.round_speed_car_green
+    # settings.distance_car_offset = abs(settings.distance_car_red - settings.distance_car_green)
     car_green.rect_mirror.top = car_green.rect_mirror.top - settings.round_speed_car_green + settings.round_speed_car_red
     car_red.rect_mirror.top = car_red.rect_mirror.top - settings.round_speed_car_red + settings.round_speed_car_green
     for tractor in settings.tractors_move_right:
@@ -186,6 +196,15 @@ def update_rects():
             car_green.crash = True
             truck.rdy_remove = True
 
+# финиш
+def update_finish(stats):
+    if overlap_left(car_red, finish):
+        stats.final_active = True
+        stats.game_active = False
+    if overlap_right(car_green, finish):
+        stats.final_active = True
+        stats.game_active = False
+
 # добавляем объекты в списки
 def append_rects():
     oil_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.oil_chance_increment) / 100
@@ -213,6 +232,19 @@ def append_rects():
         settings.trucks.append(truck)
         settings.truck_chance_increment += 2000
 
+# Обновить расположение объектов на экране.
+def update_final_text():
+    for message in settings.final_text:
+        message.scroll_text()
+
+# Создание объектов в списке
+def append_messages():
+    for message in settings.messages:
+        settings.first_line += 33
+        new_message = Text(screen, message, screen.rect.centerx, screen.rect.bottom + settings.first_line)
+        settings.final_text.append(new_message)
+    settings.messages.clear()
+
 # удаляем объекты из списков
 def remove_rects():
     for oil in settings.oils:
@@ -233,6 +265,7 @@ def remove_rects():
 def blit_screen(stats):
     screen.blitme()
     road.blitme()
+    finish.blitme()
     position.blitme()
     for oil in settings.oils:
         oil.blitme()
@@ -246,7 +279,10 @@ def blit_screen(stats):
         tractor.blitme()
     car_red.blitme()
     car_green.blitme()
-    if not stats.game_active:
+    if not stats.game_active and not stats.final_active:
         for button in buttons:
             button.blitme()
+    if stats.final_active:
+        for message in settings.final_text:
+            message.blitme()
     pygame.display.update()

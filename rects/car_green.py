@@ -16,9 +16,7 @@ class CarGreen():
         self.rect_mirror = self.surface.get_rect()
         # Получение начальных координат изображения
         self.rect_origin.centery = screen.rect.centery
-        self.rect_origin.centerx = screen.rect.right -  screen.rect.centerx / 4
-        self.rect_mirror.centery = screen.rect.centery
-        self.rect_mirror.centerx = screen.rect.centerx / 2
+        self.new_game()
 
     # Учитываем торможение
     def update(self):
@@ -41,6 +39,12 @@ class CarGreen():
             self.settings.sf_car_green = 0.3
             self.nitro_reload = 0
             self.nitro_timer = 0
+
+    # Исходная позиция
+    def new_game(self):
+        self.rect_origin.centerx = self.screen.rect.right -  self.screen.rect.centerx / 4
+        self.rect_mirror.centery = self.screen.rect.centery
+        self.rect_mirror.centerx = self.screen.rect.centerx / 2
 
     # Вывод изображения на экран
     def blitme(self):

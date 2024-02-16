@@ -21,8 +21,8 @@ class LTractor():
             self.rect_right.bottom = 0
 
     def update(self):
-            self.rect_left.left -= self.speed
-            self.rect_right.left -= self.speed
+        self.rect_left.left -= self.speed
+        self.rect_right.left -= self.speed
 
     def remove(self):
         if self.rect_left.centerx < 0:

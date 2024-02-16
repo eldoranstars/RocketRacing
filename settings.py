@@ -72,6 +72,8 @@ class Settings():
             self.fire32, self.fire33, self.fire34, self.fire35, self.fire36, self.fire37, self.fire38, self.fire39, \
             self.fire40, self.fire41, self.fire42, self.fire43, self.fire44, self.fire45, self.fire46, self.fire47]
         self.road_surface = pygame.image.load(resource_path('media/road.jpg'))
+        self.finish_surface = pygame.image.load(resource_path('media/finish.png'))
+        self.finish_surface_mid = pygame.transform.scale(self.finish_surface, (140,40))
         self.oil_surface = pygame.image.load(resource_path('media/oil.png'))
         self.oil_surface = pygame.transform.scale(self.oil_surface, (85,50))
         self.nitro_surface = pygame.image.load(resource_path('media/nitro.png'))
@@ -108,6 +110,9 @@ class Settings():
     def update(self):
         self.round_speed_car_red = round(self.speed_car_red)
         self.round_speed_car_green = round(self.speed_car_green)
+        self.distance_car_red += self.round_speed_car_red
+        self.distance_car_green += self.round_speed_car_green
+        self.distance_car_offset = abs(self.distance_car_red - self.distance_car_green)
 
     # Сбросить параметры для новой игры
     def new_game(self):
@@ -124,6 +129,7 @@ class Settings():
         self.distance_car_red = 0
         self.distance_car_green = 0
         self.distance_car_offset = 0
+        self.distance_factor = 5
         self.oil_chance_increment = 0
         self.oils = []
         self.nitros = []
@@ -134,3 +140,13 @@ class Settings():
         self.tractors_move_right = []
         self.tractors_move_left = []
         self.crash_timer = len(self.firelist)
+        # Титры
+        self.first_line = 0
+        self.final_text = []
+        self.messages = ['Producer:', 'eldoranstars', '', \
+            'Project Manager:', 'eldoranstars', '', \
+            'Game Developer:', 'eldoranstars', '', \
+            'Game Designer:', 'eldoranstars', '', \
+            'Sound Designer:', 'eldoranstars', '', \
+            'Quality Assurance:', 'eldoranstars', '', \
+            'Lead DevOps:', 'eldoranstars']
