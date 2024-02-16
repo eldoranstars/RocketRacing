@@ -28,6 +28,10 @@ class Nitro():
             if self.rect_right.top > self.screen.rect.bottom:
                 self.settings.nitros.remove(self)
 
+    def update(self):
+        self.rect_left.top += self.settings.round_speed_car_red
+        self.rect_right.top += self.settings.round_speed_car_green
+
     # Вывод изображения на экран
     def blitme(self):
         self.screen.surface.blit(self.surface, self.rect_left)

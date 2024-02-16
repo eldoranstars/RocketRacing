@@ -30,8 +30,8 @@ class Truck():
                 self.settings.trucks.remove(self)
 
     def update(self):
-            self.rect_left.top -= self.speed
-            self.rect_right.top -= self.speed
+        self.rect_left.top += (self.settings.round_speed_car_red - self.speed)
+        self.rect_right.top += (self.settings.round_speed_car_green - self.speed)
 
     # Вывод изображения на экран
     def blitme(self):

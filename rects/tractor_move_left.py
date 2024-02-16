@@ -20,13 +20,15 @@ class LTractor():
             self.rect_left.bottom = - settings.distance_car_offset
             self.rect_right.bottom = 0
 
-    def update(self):
-        self.rect_left.left -= self.speed
-        self.rect_right.left -= self.speed
-
     def remove(self):
         if self.rect_left.centerx < 0:
             self.settings.tractors_move_left.remove(self)
+
+    def update(self):
+        self.rect_left.top += self.settings.round_speed_car_red
+        self.rect_right.top += self.settings.round_speed_car_green
+        self.rect_left.left -= self.speed
+        self.rect_right.left -= self.speed
 
     # Вывод изображения на экран
     def blitme(self):

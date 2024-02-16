@@ -79,12 +79,7 @@ def check_events(stats, joystick_zero, joystick_one):
                 if event.key == pygame.K_p:
                     stats.game_active = True
                     if stats.final_active:
-                        finish.new_game()
-                        position.new_game()
-                        car_red.new_game()
-                        car_green.new_game()
-                        settings.new_game()
-                        stats.final_active = False
+                        new_game(stats)
             if event.type == pygame.JOYBUTTONDOWN:
                 if joystick.get_button(6) == 1:
                     pygame.quit()
@@ -101,9 +96,21 @@ def check_events(stats, joystick_zero, joystick_one):
                 if joystick.get_button(7) == 1:
                     stats.game_active = True
 
+# запуск новой игры
+def new_game(stats):
+    finish.new_game()
+    position.new_game()
+    car_red.new_game()
+    car_green.new_game()
+    settings.new_game()
+    stats.final_active = False
+
 def update_cars(stats, joystick_zero, joystick_one):
     # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
     key = pygame.key.get_pressed()
+    if overlap_left(car_red, finish) or overlap_right(car_green, finish):
+        stats.final_active = True
+        stats.game_active = False
     if key[pygame.K_w] == 1 and not car_red.crash:
         settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
     if key[pygame.K_a] == 1 and car_red.rect_origin.left > screen.rect.left:
@@ -141,18 +148,10 @@ def update_rects():
     car_green.update()
     position.update()
     finish.update()
-    # road.rect_left_one.top += settings.round_speed_car_red
-    # road.rect_left_two.top += settings.round_speed_car_red
-    # road.rect_right_one.top += settings.round_speed_car_green
-    # road.rect_right_two.top += settings.round_speed_car_green
-    # settings.distance_car_red += settings.round_speed_car_red
-    # settings.distance_car_green += settings.round_speed_car_green
-    # settings.distance_car_offset = abs(settings.distance_car_red - settings.distance_car_green)
     car_green.rect_mirror.top = car_green.rect_mirror.top - settings.round_speed_car_green + settings.round_speed_car_red
     car_red.rect_mirror.top = car_red.rect_mirror.top - settings.round_speed_car_red + settings.round_speed_car_green
     for tractor in settings.tractors_move_right:
-        tractor.rect_left.top += settings.round_speed_car_red
-        tractor.rect_right.top += settings.round_speed_car_green
+        tractor.update()
         if overlap_left(car_red, tractor):
             settings.speed_car_red = 0
             car_red.crash = True
@@ -160,8 +159,7 @@ def update_rects():
             settings.speed_car_green = 0
             car_green.crash = True
     for tractor in settings.tractors_move_left:
-        tractor.rect_left.top += settings.round_speed_car_red
-        tractor.rect_right.top += settings.round_speed_car_green
+        tractor.update()
         if overlap_left(car_red, tractor):
             settings.speed_car_red = 0
             car_red.crash = True
@@ -169,15 +167,13 @@ def update_rects():
             settings.speed_car_green = 0
             car_green.crash = True
     for oil in settings.oils:
-        oil.rect_left.top += settings.round_speed_car_red
-        oil.rect_right.top += settings.round_speed_car_green
+        oil.update()
         if overlap_left(car_red, oil):
             settings.speed_car_red = max(settings.speed_car_red / 2, 2)
         if overlap_right(car_green, oil):
             settings.speed_car_green = max(settings.speed_car_green / 2, 2)
     for nitro in settings.nitros:
-        nitro.rect_left.top += settings.round_speed_car_red
-        nitro.rect_right.top += settings.round_speed_car_green
+        nitro.update()
         if overlap_left(car_red, nitro):
             nitro.rdy_remove = True
             car_red.nitro_timer += 60
@@ -185,8 +181,7 @@ def update_rects():
             nitro.rdy_remove = True
             car_green.nitro_timer += 60
     for truck in settings.trucks:
-        truck.rect_left.top += settings.round_speed_car_red
-        truck.rect_right.top += settings.round_speed_car_green
+        truck.update()
         if overlap_left(car_red, truck):
             settings.speed_car_red = 0
             car_red.crash = True
@@ -195,15 +190,6 @@ def update_rects():
             settings.speed_car_green = 0
             car_green.crash = True
             truck.rdy_remove = True
-
-# финиш
-def update_finish(stats):
-    if overlap_left(car_red, finish):
-        stats.final_active = True
-        stats.game_active = False
-    if overlap_right(car_green, finish):
-        stats.final_active = True
-        stats.game_active = False
 
 # добавляем объекты в списки
 def append_rects():
@@ -252,13 +238,10 @@ def remove_rects():
     for nitro in settings.nitros:
         nitro.remove()
     for truck in settings.trucks:
-        truck.update()
         truck.remove()
     for tractor in settings.tractors_move_right:
-        tractor.update()
         tractor.remove()
     for tractor in settings.tractors_move_left:
-        tractor.update()
         tractor.remove()
 
 # Вывод изображений на экран.
