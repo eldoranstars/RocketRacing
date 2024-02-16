@@ -193,12 +193,13 @@ def update_rects():
 
 # добавляем объекты в списки
 def append_rects():
-    oil_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.oil_chance_increment) / 100
+    max_distance = max(settings.distance_car_red,settings.distance_car_green)
+    oil_chance_to_appear = (max_distance - settings.oil_chance_increment) / 100
     if random.randrange(0,100) < oil_chance_to_appear:
         oil = Oil(screen, settings)
         settings.oils.append(oil)
         settings.oil_chance_increment += 1000
-    tractor_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.tractor_chance_increment) / 100
+    tractor_chance_to_appear = (max_distance - settings.tractor_chance_increment) / 100
     if random.randrange(0,100) < tractor_chance_to_appear:
         tractor = RTractor(screen, settings)
         settings.tractors_move_right.append(tractor)
@@ -207,12 +208,12 @@ def append_rects():
         tractor = LTractor(screen, settings)
         settings.tractors_move_left.append(tractor)
         settings.tractor_chance_increment += 1000
-    nitro_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.nitro_chance_increment) / 100
+    nitro_chance_to_appear = (max_distance - settings.nitro_chance_increment) / 100
     if random.randrange(0,100) < nitro_chance_to_appear:
         nitro = Nitro(screen, settings)
         settings.nitros.append(nitro)
         settings.nitro_chance_increment += 2000
-    truck_chance_to_appear = (max(settings.distance_car_red,settings.distance_car_green) - settings.truck_chance_increment) / 100
+    truck_chance_to_appear = (max_distance - settings.truck_chance_increment) / 100
     if random.randrange(0,100) < truck_chance_to_appear:
         truck = Truck(screen, settings)
         settings.trucks.append(truck)
