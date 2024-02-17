@@ -13,6 +13,6 @@
 - Python 3.8.10
 
 ##### compile linux
-pyinstaller -F --add-data "media/*:media" --add-data "rects/*:." --icon=favicon.ico game.py --name InvadersInvasion
+pyinstaller -F --add-data "media/*:media" --add-data "rects/*:." --icon=favicon.ico game.py --name RocketRacing
 ##### compile windows
-pyinstaller -F --add-data "media\*;media" --add-data "rects\*;." --icon=favicon.ico game.py --name InvadersInvasion
+pyinstaller -F --add-data "media\*;media" --add-data "rects\*;." --icon=favicon.ico game.py --name RocketRacing

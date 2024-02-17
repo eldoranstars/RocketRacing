@@ -99,6 +99,8 @@ def check_events(stats, joystick_zero, joystick_one):
                     pygame.display.toggle_fullscreen()
                 if joystick_zero.get_button(7) == 1:
                     stats.game_active = True
+                    if stats.title_active:
+                        new_game(stats)
             # первый
             if event.type == pygame.JOYBUTTONDOWN and joystick_one:
                 if joystick_one.get_button(6) == 1:
@@ -115,6 +117,8 @@ def check_events(stats, joystick_zero, joystick_one):
                     pygame.display.toggle_fullscreen()
                 if joystick_one.get_button(7) == 1:
                     stats.game_active = True
+                    if stats.title_active:
+                        new_game(stats)
 
 # запуск новой игры
 def new_game(stats):
@@ -150,20 +154,32 @@ def update_cars(joystick_zero, joystick_one):
     if joystick_zero:
         if (joystick_zero.get_button(0) == 1 or joystick_zero.get_axis(5) > 0.2) and not car_red.crash:
             settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
-        if (joystick_zero.get_hat(0)[0] == -1 or joystick_zero.get_axis(0) < 0.2) and car_red.rect_left.left > screen.rect.left:
+        if joystick_zero.get_hat(0)[0] == -1 and car_red.rect_left.left > screen.rect.left:
             car_red.rect_left.left -= round(settings.speed_car_red / 2)
             car_red.rect_right.left -= round(settings.speed_car_red / 2)
-        if (joystick_zero.get_hat(0)[0] == 1 or joystick_zero.get_axis(0) > -0.2) and car_red.rect_right.right < screen.rect.right:
+        if joystick_zero.get_hat(0)[0] == 1 and car_red.rect_right.right < screen.rect.right:
+            car_red.rect_left.left += round(settings.speed_car_red / 2)
+            car_red.rect_right.left += round(settings.speed_car_red / 2)
+        if joystick_zero.get_axis(0) < 0.2 and car_red.rect_left.left > screen.rect.left:
+            car_red.rect_left.left -= round(settings.speed_car_red / 2)
+            car_red.rect_right.left -= round(settings.speed_car_red / 2)
+        if joystick_zero.get_axis(0) > -0.2 and car_red.rect_right.right < screen.rect.right:
             car_red.rect_left.left += round(settings.speed_car_red / 2)
             car_red.rect_right.left += round(settings.speed_car_red / 2)
     # первый
     if joystick_one:
         if (joystick_one.get_button(0) == 1 or joystick_one.get_axis(5) > 0.2) and not car_green.crash:
             settings.speed_car_green = min(settings.speed_car_green + settings.sf_car_green, settings.max_speed_car_green)
-        if (joystick_one.get_hat(0)[0] == -1 or joystick_one.get_axis(0) < 0.2) and car_green.rect_right.left > screen.rect.left:
+        if joystick_one.get_hat(0)[0] == -1 and car_green.rect_right.left > screen.rect.left:
             car_green.rect_left.left -= round(settings.speed_car_green / 2)
             car_green.rect_right.left -= round(settings.speed_car_green / 2)
-        if (joystick_one.get_hat(0)[0] == 1 or joystick_one.get_axis(0) > -0.2) and car_green.rect_left.right < screen.rect.right:
+        if joystick_one.get_hat(0)[0] == 1 and car_green.rect_left.right < screen.rect.right:
+            car_green.rect_left.left += round(settings.speed_car_green / 2)
+            car_green.rect_right.left += round(settings.speed_car_green / 2)
+        if joystick_one.get_axis(0) < 0.2 and car_green.rect_right.left > screen.rect.left:
+            car_green.rect_left.left -= round(settings.speed_car_green / 2)
+            car_green.rect_right.left -= round(settings.speed_car_green / 2)
+        if joystick_one.get_axis(0) > -0.2 and car_green.rect_left.right < screen.rect.right:
             car_green.rect_left.left += round(settings.speed_car_green / 2)
             car_green.rect_right.left += round(settings.speed_car_green / 2)
 
