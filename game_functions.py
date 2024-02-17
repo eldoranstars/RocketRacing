@@ -108,9 +108,6 @@ def new_game(stats):
 def update_cars(stats, joystick_zero, joystick_one):
     # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
     key = pygame.key.get_pressed()
-    if overlap_left(car_red, finish) or overlap_right(car_green, finish):
-        stats.final_active = True
-        stats.game_active = False
     if key[pygame.K_w] == 1 and not car_red.crash:
         settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
     if key[pygame.K_a] == 1 and car_red.rect_origin.left > screen.rect.left:
@@ -141,13 +138,13 @@ def update_cars(stats, joystick_zero, joystick_one):
     #         pass
 
 # перемещаем объекты исходя из значений скорости
-def update_rects():
+def update_rects(stats):
+    finish.update(stats)
     settings.update()
     road.update()
     car_red.update()
     car_green.update()
     position.update()
-    finish.update()
     car_green.rect_mirror.top = car_green.rect_mirror.top - settings.round_speed_car_green + settings.round_speed_car_red
     car_red.rect_mirror.top = car_red.rect_mirror.top - settings.round_speed_car_red + settings.round_speed_car_green
     for tractor in settings.tractors_move_right:

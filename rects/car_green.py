@@ -18,9 +18,10 @@ class CarGreen():
         self.rect_origin.centery = screen.rect.centery
         self.new_game()
 
-    # Учитываем торможение
     def update(self):
+        # учитываем торможение
         self.settings.speed_car_green = max(self.settings.speed_car_green - self.settings.bf_car_green, 0)
+        # учитываем анимацию взрыва
         if self.crash and self.crash_reload < self.settings.crash_timer:
             self.rect_fire_origin.center = self.rect_origin.center
             self.rect_fire_mirror.center = self.rect_mirror.center
@@ -30,6 +31,7 @@ class CarGreen():
             self.fire_surface = self.settings.firelist[-1]
             self.crash_reload = 0
             self.crash = False
+        # учитываем скорость с нитро
         if self.nitro_reload < self.nitro_timer:
             self.settings.max_speed_car_green = 33
             self.settings.sf_car_green = 1

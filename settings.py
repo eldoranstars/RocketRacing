@@ -10,6 +10,7 @@ def resource_path(relative_path):
 class Settings():
     def __init__(self):
         pygame.init()
+        pygame.mixer.pre_init(44100,-16,2, 1024)
         # Параметры экрана
         self.screen_width = 1920
         self.screen_height = 1200
@@ -102,6 +103,7 @@ class Settings():
         self.position_green_surface = pygame.transform.scale(self.car_green_surface, (25,25))
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         # Параметры аудио
+        self.wheel_sound = pygame.mixer.Sound(resource_path('media/wheel.mp3'))
         # self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
         # self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
         # Динамические параметры игры

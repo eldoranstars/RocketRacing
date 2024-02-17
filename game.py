@@ -20,6 +20,6 @@ while True:
         gf.append_messages()
     if stats.game_active:
         gf.update_cars(stats, joystick_zero, joystick_one)
-        gf.update_rects()
+        gf.update_rects(stats)
         gf.remove_rects()
         gf.append_rects()
