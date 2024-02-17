@@ -149,36 +149,28 @@ def update_rects(stats):
     car_red.rect_right.top = car_red.rect_right.top - settings.round_speed_car_red + settings.round_speed_car_green
     for tractor in settings.tractors_move_right:
         tractor.update()
-        if overlap_left(car_red, tractor):
+        if overlap_left(car_red, tractor) and not car_red.crash:
             settings.speed_car_red = 0
             car_red.crash = True
             car_red.bang = True
-            tractor.rdy_remove = True
-        if overlap_right(car_green, tractor):
+        if overlap_right(car_green, tractor) and not car_green.crash:
             settings.speed_car_green = 0
             car_green.crash = True
             car_green.bang = True
-            tractor.rdy_remove = True
         for truck in settings.trucks:
-            if overlap_left(truck, tractor):
-                truck.rdy_remove = True
-                tractor.rdy_remove = True
+            tractor.speed = 0 if overlap_left(truck, tractor) else 5
     for tractor in settings.tractors_move_left:
         tractor.update()
-        if overlap_left(car_red, tractor):
+        if overlap_left(car_red, tractor) and not car_red.crash:
             settings.speed_car_red = 0
             car_red.crash = True
             car_red.bang = True
-            tractor.rdy_remove = True
-        if overlap_right(car_green, tractor):
+        if overlap_right(car_green, tractor) and not car_green.crash:
             settings.speed_car_green = 0
             car_green.crash = True
             car_green.bang = True
-            tractor.rdy_remove = True
         for truck in settings.trucks:
-            if overlap_left(truck, tractor):
-                truck.rdy_remove = True
-                tractor.rdy_remove = True
+            tractor.speed = 0 if overlap_left(truck, tractor) else 5
     for oil in settings.oils:
         oil.update()
         if overlap_left(car_red, oil):
@@ -270,12 +262,12 @@ def blit_screen(stats):
         oil.blitme()
     for nitro in settings.nitros:
         nitro.blitme()
-    for truck in settings.trucks:
-        truck.blitme()
     for tractor in settings.tractors_move_right:
         tractor.blitme()
     for tractor in settings.tractors_move_left:
         tractor.blitme()
+    for truck in settings.trucks:
+        truck.blitme()
     car_red.blitme()
     car_green.blitme()
     if not stats.game_active and not stats.title_active:
