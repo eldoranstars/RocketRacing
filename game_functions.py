@@ -58,9 +58,10 @@ def check_events(stats, joystick_zero, joystick_one):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     stats.game_active = False
-            if event.type == pygame.JOYBUTTONDOWN:
+            if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
                 if joystick_zero.get_button(7) == 1:
                     stats.game_active = False
+            if event.type == pygame.JOYBUTTONDOWN and joystick_one:
                 if joystick_one.get_button(7) == 1:
                     stats.game_active = False
     if not stats.game_active:
@@ -82,8 +83,8 @@ def check_events(stats, joystick_zero, joystick_one):
                     stats.game_active = True
                     if stats.title_active:
                         new_game(stats)
-            if event.type == pygame.JOYBUTTONDOWN:
-                # нулевой
+            # нулевой
+            if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
                 if joystick_zero.get_button(6) == 1:
                     pygame.quit()
                     sys.exit()
@@ -98,7 +99,8 @@ def check_events(stats, joystick_zero, joystick_one):
                     pygame.display.toggle_fullscreen()
                 if joystick_zero.get_button(7) == 1:
                     stats.game_active = True
-                # первый
+            # первый
+            if event.type == pygame.JOYBUTTONDOWN and joystick_one:
                 if joystick_one.get_button(6) == 1:
                     pygame.quit()
                     sys.exit()
@@ -126,6 +128,7 @@ def new_game(stats):
 def update_cars(joystick_zero, joystick_one):
     # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
     key = pygame.key.get_pressed()
+    # слева
     if key[pygame.K_w] == 1 and not car_red.crash:
         settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
     if key[pygame.K_a] == 1 and car_red.rect_left.left > screen.rect.left:
@@ -134,6 +137,7 @@ def update_cars(joystick_zero, joystick_one):
     if key[pygame.K_d] == 1 and car_red.rect_right.right < screen.rect.right:
         car_red.rect_left.left += round(settings.speed_car_red / 2)
         car_red.rect_right.left += round(settings.speed_car_red / 2)
+    # справа
     if key[pygame.K_UP] == 1 and not car_green.crash:
         settings.speed_car_green = min(settings.speed_car_green + settings.sf_car_green, settings.max_speed_car_green)
     if key[pygame.K_LEFT] == 1 and car_green.rect_right.left > screen.rect.left:
@@ -144,24 +148,24 @@ def update_cars(joystick_zero, joystick_one):
         car_green.rect_right.left += round(settings.speed_car_green / 2)
     # нулевой
     if joystick_zero:
-        if joystick_zero.get_button(0) == 1:
+        if (joystick_zero.get_button(0) == 1 or joystick_zero.get_axis(5) > 0.2) and not car_red.crash:
             settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
-        if joystick_zero.get_hat(0)[0] == -1 and car_red.rect_left.left > screen.rect.left:
+        if (joystick_zero.get_hat(0)[0] == -1 or joystick_zero.get_axis(0) < 0.2) and car_red.rect_left.left > screen.rect.left:
             car_red.rect_left.left -= round(settings.speed_car_red / 2)
             car_red.rect_right.left -= round(settings.speed_car_red / 2)
-        if joystick_zero.get_hat(0)[0] == 1 and car_red.rect_right.right < screen.rect.right:
+        if (joystick_zero.get_hat(0)[0] == 1 or joystick_zero.get_axis(0) > -0.2) and car_red.rect_right.right < screen.rect.right:
             car_red.rect_left.left += round(settings.speed_car_red / 2)
             car_red.rect_right.left += round(settings.speed_car_red / 2)
     # первый
     if joystick_one:
-        if joystick_one.get_button(0) == 1:
-            settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
-        if joystick_one.get_hat(0)[0] == -1 and car_red.rect_left.left > screen.rect.left:
-            car_red.rect_left.left -= round(settings.speed_car_red / 2)
-            car_red.rect_right.left -= round(settings.speed_car_red / 2)
-        if joystick_one.get_hat(0)[0] == 1 and car_red.rect_right.right < screen.rect.right:
-            car_red.rect_left.left += round(settings.speed_car_red / 2)
-            car_red.rect_right.left += round(settings.speed_car_red / 2)
+        if (joystick_one.get_button(0) == 1 or joystick_one.get_axis(5) > 0.2) and not car_green.crash:
+            settings.speed_car_green = min(settings.speed_car_green + settings.sf_car_green, settings.max_speed_car_green)
+        if (joystick_one.get_hat(0)[0] == -1 or joystick_one.get_axis(0) < 0.2) and car_green.rect_right.left > screen.rect.left:
+            car_green.rect_left.left -= round(settings.speed_car_green / 2)
+            car_green.rect_right.left -= round(settings.speed_car_green / 2)
+        if (joystick_one.get_hat(0)[0] == 1 or joystick_one.get_axis(0) > -0.2) and car_green.rect_left.right < screen.rect.right:
+            car_green.rect_left.left += round(settings.speed_car_green / 2)
+            car_green.rect_right.left += round(settings.speed_car_green / 2)
 
 # перемещаем объекты исходя из значений скорости
 def update_rects(stats):
