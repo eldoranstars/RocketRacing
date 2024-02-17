@@ -25,6 +25,8 @@ class Finish():
         if self.rect_left.bottom > self.screen.rect.h / 2 or self.rect_right.bottom > self.screen.rect.h / 2:
             stats.title_active = True
             stats.game_active = False
+            self.settings.intro_sound.stop()
+            self.settings.outro_sound.play(-1)
 
     # Исходная позиция
     def new_game(self):

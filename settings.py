@@ -103,9 +103,9 @@ class Settings():
         self.position_green_surface = pygame.transform.scale(self.car_green_surface, (25,25))
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         # Параметры аудио
-        self.wheel_sound = pygame.mixer.Sound(resource_path('media/wheel.mp3'))
-        # self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
-        # self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
+        self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
+        self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
+        self.intro_sound.set_volume(0.1)
         # Динамические параметры игры
         self.new_game()
 
@@ -142,6 +142,9 @@ class Settings():
         self.tractors_move_right = []
         self.tractors_move_left = []
         self.crash_timer = len(self.firelist)
+        self.outro_sound.stop()
+        self.intro_sound.stop()
+        self.intro_sound.play(-1)
         # Титры
         self.first_line = 0
         self.title_text = []
