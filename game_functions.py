@@ -78,7 +78,7 @@ def check_events(stats, joystick_zero, joystick_one):
                     pygame.display.toggle_fullscreen()
                 if event.key == pygame.K_p:
                     stats.game_active = True
-                    if stats.final_active:
+                    if stats.title_active:
                         new_game(stats)
             if event.type == pygame.JOYBUTTONDOWN:
                 if joystick.get_button(6) == 1:
@@ -103,7 +103,7 @@ def new_game(stats):
     car_red.new_game()
     car_green.new_game()
     settings.new_game()
-    stats.final_active = False
+    stats.title_active = False
 
 def update_cars(stats, joystick_zero, joystick_one):
     # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
@@ -217,8 +217,8 @@ def append_rects():
         settings.truck_chance_increment += 2000
 
 # Обновить расположение объектов на экране.
-def update_final_text():
-    for message in settings.final_text:
+def update_title_text():
+    for message in settings.title_text:
         message.scroll_text()
 
 # Создание объектов в списке
@@ -226,7 +226,7 @@ def append_messages():
     for message in settings.messages:
         settings.first_line += 33
         new_message = Text(screen, message, screen.rect.centerx, screen.rect.bottom + settings.first_line)
-        settings.final_text.append(new_message)
+        settings.title_text.append(new_message)
     settings.messages.clear()
 
 # удаляем объекты из списков
@@ -260,10 +260,10 @@ def blit_screen(stats):
         tractor.blitme()
     car_red.blitme()
     car_green.blitme()
-    if not stats.game_active and not stats.final_active:
+    if not stats.game_active and not stats.title_active:
         for button in buttons:
             button.blitme()
-    if stats.final_active:
-        for message in settings.final_text:
+    if stats.title_active:
+        for message in settings.title_text:
             message.blitme()
     pygame.display.update()

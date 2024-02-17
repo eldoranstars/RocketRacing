@@ -144,7 +144,7 @@ class Settings():
         self.crash_timer = len(self.firelist)
         # Титры
         self.first_line = 0
-        self.final_text = []
+        self.title_text = []
         self.messages = ['Producer:', 'eldoranstars', '', \
             'Project Manager:', 'eldoranstars', '', \
             'Game Developer:', 'eldoranstars', '', \

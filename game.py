@@ -15,8 +15,8 @@ while True:
     joystick_one = pygame.joystick.Joystick(1) if pygame.joystick.get_count() else ''
     gf.check_events(stats, joystick_zero, joystick_one)
     gf.blit_screen(stats)
-    if stats.final_active and not stats.game_active:
-        gf.update_final_text()
+    if stats.title_active and not stats.game_active:
+        gf.update_title_text()
         gf.append_messages()
     if stats.game_active:
         gf.update_cars(stats, joystick_zero, joystick_one)

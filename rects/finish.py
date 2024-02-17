@@ -23,7 +23,7 @@ class Finish():
         self.rect_left.top += self.settings.round_speed_car_red
         self.rect_right.top += self.settings.round_speed_car_green
         if self.rect_left.bottom > self.screen.rect.h / 2 or self.rect_right.bottom > self.screen.rect.h / 2:
-            stats.final_active = True
+            stats.title_active = True
             stats.game_active = False
 
     # Исходная позиция
