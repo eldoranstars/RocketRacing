@@ -31,14 +31,14 @@ buttons = [pause]
 def overlap_left(player, enemy):
     player.mask = pygame.mask.from_surface(player.surface)
     enemy.mask = pygame.mask.from_surface(enemy.surface)
-    overlap = player.mask.overlap(enemy.mask, (enemy.rect_left.left - player.rect_origin.left, enemy.rect_left.top - player.rect_origin.top))
+    overlap = player.mask.overlap(enemy.mask, (enemy.rect_left.left - player.rect_left.left, enemy.rect_left.top - player.rect_left.top))
     return overlap
 
 # Получаем пиксельную маску для обработки коллизий.
 def overlap_right(player, enemy):
     player.mask = pygame.mask.from_surface(player.surface)
     enemy.mask = pygame.mask.from_surface(enemy.surface)
-    overlap = player.mask.overlap(enemy.mask, (enemy.rect_right.left - player.rect_origin.left, enemy.rect_right.top - player.rect_origin.top))
+    overlap = player.mask.overlap(enemy.mask, (enemy.rect_right.left - player.rect_left.left, enemy.rect_right.top - player.rect_left.top))
     return overlap
 
 def collision(rect, wm, hm):
@@ -110,20 +110,20 @@ def update_cars(stats, joystick_zero, joystick_one):
     key = pygame.key.get_pressed()
     if key[pygame.K_w] == 1 and not car_red.crash:
         settings.speed_car_red = min(settings.speed_car_red + settings.sf_car_red, settings.max_speed_car_red)
-    if key[pygame.K_a] == 1 and car_red.rect_origin.left > screen.rect.left:
-        car_red.rect_origin.left -= round(settings.speed_car_red / 2)
-        car_red.rect_mirror.left -= round(settings.speed_car_red / 2)
-    if key[pygame.K_d] == 1 and car_red.rect_mirror.right < screen.rect.right:
-        car_red.rect_origin.left += round(settings.speed_car_red / 2)
-        car_red.rect_mirror.left += round(settings.speed_car_red / 2)
+    if key[pygame.K_a] == 1 and car_red.rect_left.left > screen.rect.left:
+        car_red.rect_left.left -= round(settings.speed_car_red / 2)
+        car_red.rect_right.left -= round(settings.speed_car_red / 2)
+    if key[pygame.K_d] == 1 and car_red.rect_right.right < screen.rect.right:
+        car_red.rect_left.left += round(settings.speed_car_red / 2)
+        car_red.rect_right.left += round(settings.speed_car_red / 2)
     if key[pygame.K_UP] == 1 and not car_green.crash:
         settings.speed_car_green = min(settings.speed_car_green + settings.sf_car_green, settings.max_speed_car_green)
-    if key[pygame.K_LEFT] == 1 and car_green.rect_mirror.left > screen.rect.left:
-        car_green.rect_origin.left -= round(settings.speed_car_green / 2)
-        car_green.rect_mirror.left -= round(settings.speed_car_green / 2)
-    if key[pygame.K_RIGHT] == 1 and car_green.rect_origin.right < screen.rect.right:
-        car_green.rect_origin.left += round(settings.speed_car_green / 2)
-        car_green.rect_mirror.left += round(settings.speed_car_green / 2)
+    if key[pygame.K_LEFT] == 1 and car_green.rect_right.left > screen.rect.left:
+        car_green.rect_left.left -= round(settings.speed_car_green / 2)
+        car_green.rect_right.left -= round(settings.speed_car_green / 2)
+    if key[pygame.K_RIGHT] == 1 and car_green.rect_left.right < screen.rect.right:
+        car_green.rect_left.left += round(settings.speed_car_green / 2)
+        car_green.rect_right.left += round(settings.speed_car_green / 2)
 
     # if joystick_zero:
     #     if joystick_zero.get_axis(0) and joystick_zero.get_axis(0) > 0.2:
@@ -145,24 +145,40 @@ def update_rects(stats):
     car_red.update()
     car_green.update()
     position.update()
-    car_green.rect_mirror.top = car_green.rect_mirror.top - settings.round_speed_car_green + settings.round_speed_car_red
-    car_red.rect_mirror.top = car_red.rect_mirror.top - settings.round_speed_car_red + settings.round_speed_car_green
+    car_green.rect_right.top = car_green.rect_right.top - settings.round_speed_car_green + settings.round_speed_car_red
+    car_red.rect_right.top = car_red.rect_right.top - settings.round_speed_car_red + settings.round_speed_car_green
     for tractor in settings.tractors_move_right:
         tractor.update()
         if overlap_left(car_red, tractor):
             settings.speed_car_red = 0
             car_red.crash = True
+            car_red.bang = True
+            tractor.rdy_remove = True
         if overlap_right(car_green, tractor):
             settings.speed_car_green = 0
             car_green.crash = True
+            car_green.bang = True
+            tractor.rdy_remove = True
+        for truck in settings.trucks:
+            if overlap_left(truck, tractor):
+                truck.rdy_remove = True
+                tractor.rdy_remove = True
     for tractor in settings.tractors_move_left:
         tractor.update()
         if overlap_left(car_red, tractor):
             settings.speed_car_red = 0
             car_red.crash = True
+            car_red.bang = True
+            tractor.rdy_remove = True
         if overlap_right(car_green, tractor):
             settings.speed_car_green = 0
             car_green.crash = True
+            car_green.bang = True
+            tractor.rdy_remove = True
+        for truck in settings.trucks:
+            if overlap_left(truck, tractor):
+                truck.rdy_remove = True
+                tractor.rdy_remove = True
     for oil in settings.oils:
         oil.update()
         if overlap_left(car_red, oil):
@@ -182,10 +198,12 @@ def update_rects(stats):
         if overlap_left(car_red, truck):
             settings.speed_car_red = 0
             car_red.crash = True
+            car_red.bang = True
             truck.rdy_remove = True
         if overlap_right(car_green, truck):
             settings.speed_car_green = 0
             car_green.crash = True
+            car_green.bang = True
             truck.rdy_remove = True
 
 # добавляем объекты в списки

@@ -103,6 +103,7 @@ class Settings():
         self.position_green_surface = pygame.transform.scale(self.car_green_surface, (25,25))
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         # Параметры аудио
+        self.bang_sound = pygame.mixer.Sound(resource_path('media/bang.mp3'))
         self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
         self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
         self.intro_sound.set_volume(0.1)

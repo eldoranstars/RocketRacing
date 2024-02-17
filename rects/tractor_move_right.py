@@ -6,6 +6,7 @@ class RTractor():
         self.screen = screen
         self.settings = settings
         self.speed = random.randrange(2,6)
+        self.rdy_remove = False
         # Загрузка изображения и получение прямоугольника
         self.surface = random.choice(settings.tractor_mr)
         self.rect_left = self.surface.get_rect()
@@ -21,7 +22,7 @@ class RTractor():
             self.rect_right.bottom = 0
 
     def remove(self):
-        if self.rect_left.centerx > 720:
+        if self.rdy_remove or self.rect_left.centerx > 720:
             self.settings.tractors_move_right.remove(self)
 
     def update(self):
