@@ -192,6 +192,7 @@ def update_rects(stats):
             car_green.bang = True
         for truck in settings.trucks:
             tractor.speed = 0 if truck.rect_left.colliderect(tractor.rect_left) else 5
+            tractor.rdy_remove = True if truck.rect_left.collidepoint(tractor.rect_left.center) else False
     for tractor in settings.tractors_move_left:
         tractor.update()
         if overlap_left(car_red, tractor) and not car_red.crash:
@@ -204,6 +205,7 @@ def update_rects(stats):
             car_green.bang = True
         for truck in settings.trucks:
             tractor.speed = 0 if truck.rect_left.colliderect(tractor.rect_left) else 5
+            tractor.rdy_remove = True if truck.rect_left.collidepoint(tractor.rect_left.center) else False
     for oil in settings.oils:
         oil.update()
         if overlap_left(car_red, oil):
