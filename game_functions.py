@@ -123,7 +123,6 @@ def check_events(stats, joystick_zero, joystick_one):
 # запуск новой игры
 def new_game(stats):
     finish.new_game()
-    position.new_game()
     car_red.new_game()
     car_green.new_game()
     settings.new_game()
@@ -192,7 +191,7 @@ def update_rects(stats):
             car_green.crash = True
             car_green.bang = True
         for truck in settings.trucks:
-            tractor.speed = 0 if overlap_left(truck, tractor) else 5
+            tractor.speed = 0 if truck.rect_left.colliderect(tractor.rect_left) else 5
     for tractor in settings.tractors_move_left:
         tractor.update()
         if overlap_left(car_red, tractor) and not car_red.crash:
@@ -204,7 +203,7 @@ def update_rects(stats):
             car_green.crash = True
             car_green.bang = True
         for truck in settings.trucks:
-            tractor.speed = 0 if overlap_left(truck, tractor) else 5
+            tractor.speed = 0 if truck.rect_left.colliderect(tractor.rect_left) else 5
     for oil in settings.oils:
         oil.update()
         if overlap_left(car_red, oil):
