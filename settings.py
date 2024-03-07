@@ -133,7 +133,7 @@ class Settings():
         self.distance_car_red = 0
         self.distance_car_green = 0
         self.distance_car_offset = 0
-        self.distance_factor = 100
+        self.distance_factor = 10
         self.oil_chance_increment = 0
         self.oils = []
         self.nitros = []
@@ -145,7 +145,6 @@ class Settings():
         self.tractors_move_left = []
         self.crash_timer = len(self.firelist)
         self.outro_sound.stop()
-        self.intro_sound.stop()
         self.intro_sound.play(-1)
         # Титры
         self.first_line = 0

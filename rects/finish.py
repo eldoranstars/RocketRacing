@@ -25,7 +25,7 @@ class Finish():
         self.rect_left.top += self.settings.round_speed_car_red
         self.rect_right.top += self.settings.round_speed_car_green
         if self.rect_left.bottom > self.screen.rect.h / 2 or self.rect_right.bottom > self.screen.rect.h / 2:
-            stats = "title_active"
+            stats.game = "title_active"
             self.settings.intro_sound.stop()
             self.settings.outro_sound.play(-1)
 

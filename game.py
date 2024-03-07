@@ -21,10 +21,10 @@ while True:
         gf.remove_rects()
         gf.append_rects()
     if stats.game == "not_game_active":
-        gf.events_not_game_active(stats, joystick_zero, joystick_one)
         gf.blit_screen_not_game_active()
-    if stats.game == "title_active":
         gf.events_not_game_active(stats, joystick_zero, joystick_one)
+    if stats.game == "title_active":
         gf.blit_screen_title_active()
+        gf.events_title_active(stats, joystick_zero, joystick_one)
         gf.update_title_text()
         gf.append_messages()

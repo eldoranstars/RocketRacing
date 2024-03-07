@@ -11,12 +11,17 @@ class Position():
         # Получение начальных координат изображения
         self.rect_left.centerx = screen.rect.centerx - 36
         self.rect_right.centerx = screen.rect.centerx + 36
-        self.update()
+        self.new_game()
 
     # двигаемся к финишу
     def update(self):
         self.rect_left.bottom = self.screen.rect.h - round(self.settings.distance_car_red / self.settings.distance_factor)
         self.rect_right.bottom = self.screen.rect.h - round(self.settings.distance_car_green / self.settings.distance_factor)
+
+    # Исходная позиция
+    def new_game(self):
+        self.rect_left.bottom = self.screen.rect.bottom
+        self.rect_right.bottom = self.screen.rect.bottom
 
     # вывод изображения на экран
     def blitme(self):
