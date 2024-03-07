@@ -107,6 +107,7 @@ class Settings():
         self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
         self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
         self.intro_sound.set_volume(0.1)
+        self.music_active = True
         # Динамические параметры игры
         self.new_game()
 

@@ -1,5 +1,3 @@
 class GameStats():
     def __init__(self):
-        self.game_active = False
-        self.music_active = True
-        self.title_active = False
+        self.game = "not_game_active"

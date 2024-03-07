@@ -52,73 +52,76 @@ def collision_test(object, wm, hm):
     screen.surface.blit(pygame.Surface((collision(object.rect, wm, hm).width,collision(object.rect, wm, hm).height)), collision(object.rect, wm, hm))
 
 # Отслеживание нажатий клавиатуры и джойстика.
-def check_events(stats, joystick_zero, joystick_one):
-    if stats.game_active:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    stats.game_active = False
-            if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
-                if joystick_zero.get_button(7) == 1:
-                    stats.game_active = False
-            if event.type == pygame.JOYBUTTONDOWN and joystick_one:
-                if joystick_one.get_button(7) == 1:
-                    stats.game_active = False
-    if not stats.game_active:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-                if event.key == pygame.K_m:
-                    if stats.music_active:
-                        stats.music_active = False
-                        pygame.mixer.pause()
-                    else:
-                        stats.music_active = True
-                        pygame.mixer.unpause()
-                if event.key == pygame.K_f:
-                    pygame.display.toggle_fullscreen()
-                if event.key == pygame.K_p:
-                    stats.game_active = True
-                    if stats.title_active:
-                        new_game(stats)
-            # нулевой
-            if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
-                if joystick_zero.get_button(6) == 1:
-                    pygame.quit()
-                    sys.exit()
-                if joystick_zero.get_button(5) == 1:
-                    if stats.music_active:
-                        stats.music_active = False
-                        pygame.mixer.pause()
-                    else:
-                        stats.music_active = True
-                        pygame.mixer.unpause()
-                if joystick_zero.get_button(4) == 1:
-                    pygame.display.toggle_fullscreen()
-                if joystick_zero.get_button(7) == 1:
-                    stats.game_active = True
-                    if stats.title_active:
-                        new_game(stats)
-            # первый
-            if event.type == pygame.JOYBUTTONDOWN and joystick_one:
-                if joystick_one.get_button(6) == 1:
-                    pygame.quit()
-                    sys.exit()
-                if joystick_one.get_button(5) == 1:
-                    if stats.music_active:
-                        stats.music_active = False
-                        pygame.mixer.pause()
-                    else:
-                        stats.music_active = True
-                        pygame.mixer.unpause()
-                if joystick_one.get_button(4) == 1:
-                    pygame.display.toggle_fullscreen()
-                if joystick_one.get_button(7) == 1:
-                    stats.game_active = True
-                    if stats.title_active:
-                        new_game(stats)
+def events_not_game_active(stats, joystick_zero, joystick_one):
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+            if event.key == pygame.K_m:
+                if settings.music_active:
+                    settings.music_active = False
+                    pygame.mixer.pause()
+                else:
+                    settings.music_active = True
+                    pygame.mixer.unpause()
+            if event.key == pygame.K_f:
+                pygame.display.toggle_fullscreen()
+            if event.key == pygame.K_p:
+                stats.game = "game_active"
+        # нулевой
+        if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
+            if joystick_zero.get_button(7) == 1:
+                stats.game = "game_active"
+            if joystick_zero.get_button(6) == 1:
+                pygame.quit()
+                sys.exit()
+            if joystick_zero.get_button(5) == 1:
+                if settings.music_active:
+                    settings.music_active = False
+                    pygame.mixer.pause()
+                else:
+                    settings.music_active = True
+                    pygame.mixer.unpause()
+            if joystick_zero.get_button(4) == 1:
+                pygame.display.toggle_fullscreen()
+        # первый
+        if event.type == pygame.JOYBUTTONDOWN and joystick_one:
+            if joystick_one.get_button(7) == 1:
+                stats.game = "game_active"
+            if joystick_one.get_button(6) == 1:
+                pygame.quit()
+                sys.exit()
+            if joystick_one.get_button(5) == 1:
+                if settings.music_active:
+                    settings.music_active = False
+                    pygame.mixer.pause()
+                else:
+                    settings.music_active = True
+                    pygame.mixer.unpause()
+            if joystick_one.get_button(4) == 1:
+                pygame.display.toggle_fullscreen()
+
+# Отслеживание нажатий клавиатуры и джойстика.
+def events_game_active(stats, joystick_zero, joystick_one):
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                stats.game = "not_game_active"
+                if stats.game == "title_active":
+                    new_game(stats)
+        # нулевой
+        if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
+            if joystick_zero.get_button(7) == 1:
+                stats.game = "not_game_active"
+                if stats.game == "title_active":
+                    new_game(stats)
+        # первый
+        if event.type == pygame.JOYBUTTONDOWN and joystick_one:
+            if joystick_one.get_button(7) == 1:
+                stats.game = "not_game_active"
+                if stats.game == "title_active":
+                    new_game(stats)
 
 # запуск новой игры
 def new_game(stats):
@@ -126,7 +129,7 @@ def new_game(stats):
     car_red.new_game()
     car_green.new_game()
     settings.new_game()
-    stats.title_active = False
+    stats.game = "not_game_active"
 
 def update_cars(joystick_zero, joystick_one):
     # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
@@ -288,7 +291,8 @@ def remove_rects():
         tractor.remove()
 
 # Вывод изображений на экран.
-def blit_screen(stats):
+def blit_screen():
+    pygame.display.update()
     screen.blitme()
     road.blitme()
     finish.blitme()
@@ -305,10 +309,13 @@ def blit_screen(stats):
         truck.blitme()
     car_red.blitme()
     car_green.blitme()
-    if not stats.game_active and not stats.title_active:
-        for button in buttons:
-            button.blitme()
-    if stats.title_active:
-        for message in settings.title_text:
-            message.blitme()
-    pygame.display.update()
+
+# Вывод изображений на экран.
+def blit_screen_not_game_active():
+    for button in buttons:
+        button.blitme()
+
+# Вывод изображений на экран.
+def blit_screen_title_active():
+    for message in settings.title_text:
+        message.blitme()
