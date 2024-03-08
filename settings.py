@@ -103,6 +103,7 @@ class Settings():
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         # Параметры аудио
         self.bang_sound = pygame.mixer.Sound(resource_path('media/bang.mp3'))
+        self.start_sound = pygame.mixer.Sound(resource_path('media/start.mp3'))
         self.intro_sound = pygame.mixer.Sound(resource_path('media/intro.mp3'))
         self.outro_sound = pygame.mixer.Sound(resource_path('media/outro.mp3'))
         self.intro_sound.set_volume(0.1)
@@ -144,7 +145,6 @@ class Settings():
         self.truck_chance_increment = 0
         self.crash_timer = len(self.firelist)
         self.outro_sound.stop()
-        self.intro_sound.play(-1)
         # Титры
         self.first_line = 0
         self.title_text = []

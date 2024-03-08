@@ -135,6 +135,7 @@ def new_game(stats):
     car_red.new_game()
     car_green.new_game()
     settings.new_game()
+    start_light.new_game()
     stats.game = "not_game_active"
 
 def update_cars(joystick_zero, joystick_one):

@@ -31,17 +31,22 @@ class StartLight():
         if self.start_light:
             self.start_light_timer += 1
             if self.start_light_timer > 30 and not self.start_light_red:
+                self.settings.start_sound.play()
                 self.surface.fill((196, 30, 30))
                 self.start_light_red = True
             if self.start_light_timer > 60 and not self.start_light_yellow:
+                self.settings.start_sound.play()
                 self.surface.fill((196, 196, 30))
                 self.start_light_yellow = True
-            if self.start_light_timer > 90 and not self.start_light_green:
-                self.surface.fill((30, 196, 30))
-                self.start_light_green = True
+            if self.start_light_timer > 90:
+                # делаем третий гудок затяжным
+                self.settings.start_sound.play()
+                if not self.start_light_green:
+                    self.surface.fill((30, 196, 30))
+                    self.start_light_green = True
             if self.start_light_timer > 120:
-                self.surface.fill(self.settings.screen_color)
                 self.start_light = False
+                self.settings.intro_sound.play(-1)
 
     # Вывод изображения на экран
     def blitme(self):
