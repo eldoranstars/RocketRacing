@@ -16,10 +16,12 @@ from tractor_move_right import RTractor
 from tractor_move_left import LTractor
 from car_red import CarRed
 from car_green import CarGreen
+from start_light import StartLight
 
 settings = Settings()
 screen = Screen(settings)
 road = Road(screen, settings)
+start_light = StartLight(screen, settings)
 finish = Finish(screen, settings)
 position = Position(screen, settings)
 car_red = CarRed(screen, settings)
@@ -185,6 +187,7 @@ def update_rects(stats):
     car_red.update()
     car_green.update()
     position.update()
+    start_light.update()
     car_green.rect_right.top = car_green.rect_right.top - settings.round_speed_car_green + settings.round_speed_car_red
     car_red.rect_right.top = car_red.rect_right.top - settings.round_speed_car_red + settings.round_speed_car_green
     for tractor in settings.tractors_move_right:
@@ -301,6 +304,7 @@ def blit_screen():
     road.blitme()
     finish.blitme()
     position.blitme()
+    start_light.blitme()
     for oil in settings.oils:
         oil.blitme()
     for nitro in settings.nitros:

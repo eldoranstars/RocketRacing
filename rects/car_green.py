@@ -3,11 +3,6 @@ class CarGreen():
         # Атрибуты класса
         self.screen = screen
         self.settings = settings
-        self.crash_reload = 0
-        self.nitro_reload = 0
-        self.nitro_timer = 0
-        self.crash = False
-        self.bang = False
         # Загрузка изображения и получение прямоугольника
         self.surface = settings.car_green_surface
         self.fire_surface = settings.firelist[-1]
@@ -48,6 +43,11 @@ class CarGreen():
 
     # Исходная позиция
     def new_game(self):
+        self.crash_reload = 0
+        self.nitro_reload = 0
+        self.nitro_timer = 0
+        self.crash = False
+        self.bang = False
         self.rect_left.centerx = self.screen.rect.right -  self.screen.rect.centerx / 4
         self.rect_right.centery = self.screen.rect.centery
         self.rect_right.centerx = self.screen.rect.centerx / 2

@@ -15,8 +15,6 @@ class Settings():
         self.screen_width = 1920
         self.screen_height = 1200
         self.screen_color = (100, 100, 100)
-        self.car_red_color = (255, 0, 0)
-        self.car_green_color = (0, 255, 0)
         # Параметры изображений
         self.fire00 = pygame.image.load(resource_path('media/fire00.png'))
         self.fire01 = pygame.image.load(resource_path('media/fire01.png'))
@@ -101,6 +99,7 @@ class Settings():
         self.car_green_surface = pygame.transform.scale(self.car_green_surface, (51,51))
         self.position_red_surface = pygame.transform.scale(self.car_red_surface, (25,25))
         self.position_green_surface = pygame.transform.scale(self.car_green_surface, (25,25))
+        self.start_light_surface = pygame.Surface((self.screen_height / 10, self.screen_height / 10))
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         # Параметры аудио
         self.bang_sound = pygame.mixer.Sound(resource_path('media/bang.mp3'))
@@ -134,15 +133,15 @@ class Settings():
         self.distance_car_green = 0
         self.distance_car_offset = 0
         self.distance_factor = 10
-        self.oil_chance_increment = 0
         self.oils = []
         self.nitros = []
         self.trucks = []
+        self.tractors_move_right = []
+        self.tractors_move_left = []
+        self.oil_chance_increment = 0
         self.tractor_chance_increment = 0
         self.nitro_chance_increment = 0
         self.truck_chance_increment = 0
-        self.tractors_move_right = []
-        self.tractors_move_left = []
         self.crash_timer = len(self.firelist)
         self.outro_sound.stop()
         self.intro_sound.play(-1)
