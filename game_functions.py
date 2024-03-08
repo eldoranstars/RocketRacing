@@ -137,6 +137,7 @@ def new_game(stats):
     settings.new_game()
     start_light.new_game()
     stats.game = "not_game_active"
+    stats.start_active = True
 
 def update_cars(joystick_zero, joystick_one):
     # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
@@ -188,7 +189,6 @@ def update_rects(stats):
     car_red.update()
     car_green.update()
     position.update()
-    start_light.update()
     car_green.rect_right.top = car_green.rect_right.top - settings.round_speed_car_green + settings.round_speed_car_red
     car_red.rect_right.top = car_red.rect_right.top - settings.round_speed_car_red + settings.round_speed_car_green
     for tractor in settings.tractors_move_right:
@@ -305,7 +305,6 @@ def blit_screen():
     road.blitme()
     finish.blitme()
     position.blitme()
-    start_light.blitme()
     for oil in settings.oils:
         oil.blitme()
     for nitro in settings.nitros:

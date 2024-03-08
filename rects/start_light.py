@@ -27,8 +27,8 @@ class StartLight():
         self.start_light_green = False
 
     # таймер светофора
-    def update(self):
-        if self.start_light:
+    def update(self, stats):
+        if stats.start_active:
             self.start_light_timer += 1
             if self.start_light_timer > 30 and not self.start_light_red:
                 self.settings.start_sound.play()
@@ -42,15 +42,14 @@ class StartLight():
                 # делаем третий гудок затяжным
                 self.settings.start_sound.play()
                 if not self.start_light_green:
+                    self.settings.intro_sound.play(-1)
                     self.surface.fill((30, 196, 30))
                     self.start_light_green = True
             if self.start_light_timer > 120:
-                self.start_light = False
-                self.settings.intro_sound.play(-1)
+                stats.start_active = False
 
     # Вывод изображения на экран
-    def blitme(self):
-        if self.start_light:
-            self.screen.surface.blit(self.surface, self.rect_top)
-            self.screen.surface.blit(self.surface, self.rect_mid)
-            self.screen.surface.blit(self.surface, self.rect_bot)
+    def blitme(self,):
+        self.screen.surface.blit(self.surface, self.rect_top)
+        self.screen.surface.blit(self.surface, self.rect_mid)
+        self.screen.surface.blit(self.surface, self.rect_bot)

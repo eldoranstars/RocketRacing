@@ -16,10 +16,14 @@ while True:
     gf.blit_screen()
     if stats.game == "game_active":
         gf.events_game_active(stats, joystick_zero, joystick_one)
-        gf.update_cars(joystick_zero, joystick_one)
-        gf.update_rects(stats)
-        gf.remove_rects()
-        gf.append_rects()
+        if stats.start_active:
+            gf.start_light.blitme()
+            gf.start_light.update(stats)
+        else:
+            gf.update_cars(joystick_zero, joystick_one)
+            gf.update_rects(stats)
+            gf.remove_rects()
+            gf.append_rects()
     if stats.game == "not_game_active":
         gf.blit_screen_not_game_active()
         gf.events_not_game_active(stats, joystick_zero, joystick_one)

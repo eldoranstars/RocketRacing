@@ -133,7 +133,7 @@ class Settings():
         self.distance_car_red = 0
         self.distance_car_green = 0
         self.distance_car_offset = 0
-        self.distance_factor = 10
+        self.distance_factor = 100
         self.oils = []
         self.nitros = []
         self.trucks = []
