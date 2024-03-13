@@ -31,15 +31,26 @@ class CarGreen():
             self.crash_reload = 0
             self.crash = False
         # учитываем скорость с нитро
-        if self.nitro_reload < self.nitro_timer:
-            self.settings.max_speed_car_green = 33
-            self.settings.sf_car_green = 1
-            self.nitro_reload += 1
-        else:
-            self.settings.max_speed_car_green = 22
-            self.settings.sf_car_green = 0.3
-            self.nitro_reload = 0
-            self.nitro_timer = 0
+        if self.surface == self.settings.car_green_surface:
+            if self.nitro_reload < self.nitro_timer:
+                self.settings.max_speed_car_green = 33
+                self.settings.sf_car_green = 1
+                self.nitro_reload += 1
+            else:
+                self.settings.max_speed_car_green = 22
+                self.settings.sf_car_green = 0.3
+                self.nitro_reload = 0
+                self.nitro_timer = 0
+        if self.surface == self.settings.car_green_long_surface:
+            if self.nitro_reload < self.nitro_timer:
+                self.settings.max_speed_car_green = 39
+                self.settings.sf_car_green = 0.72
+                self.nitro_reload += 1
+            else:
+                self.settings.max_speed_car_green = 26
+                self.settings.sf_car_green = 0.24
+                self.nitro_reload = 0
+                self.nitro_timer = 0
 
     # Исходная позиция
     def new_game(self):

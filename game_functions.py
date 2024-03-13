@@ -26,8 +26,10 @@ finish = Finish(screen, settings)
 position = Position(screen, settings)
 car_red = CarRed(screen, settings)
 car_green = CarGreen(screen, settings)
-pause = Text(screen, "PAUSE: P or Start button", screen.rect.centerx, screen.rect.centery)
-buttons = [pause]
+pause = Text(screen, "ПАУЗА: Start или P", screen.rect.centerx, screen.rect.centery)
+exit_game = Text(screen, "ВЫХОД из ИГРЫ: Back или ESC", screen.rect.centerx, screen.rect.centery + 80)
+cars = Text(screen, "СМЕНА МАШИНЫ: UP/DOWN", screen.rect.centerx, screen.rect.centery + 40)
+buttons = [pause,exit_game,cars]
 
 # получаем пиксельную маску для обработки коллизий.
 def overlap_left(player, enemy):
@@ -75,28 +77,57 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
                 pygame.display.toggle_fullscreen()
             if event.key == pygame.K_p:
                 stats.game = "game_active"
+            if stats.start_active:
+                if event.key == pygame.K_w:
+                    car_red.surface = settings.car_red_long_surface
+                    position.surface_left = settings.position_red_long_surface
+                if event.key == pygame.K_s:
+                    car_red.surface = settings.car_red_surface
+                    position.surface_left = settings.position_red_surface
+                if event.key == pygame.K_UP:
+                    car_green.surface = settings.car_green_long_surface
+                    position.surface_right = settings.position_green_long_surface
+                if event.key == pygame.K_DOWN:
+                    car_green.surface = settings.car_green_surface
+                    position.surface_right = settings.position_green_surface
         # нулевой
-        if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
-            if joystick_zero.get_button(7) == 1:
-                stats.game = "game_active"
-            if joystick_zero.get_button(6) == 1:
-                pygame.quit()
-                sys.exit()
-            if joystick_zero.get_button(5) == 1:
-                music_control()
-            if joystick_zero.get_button(4) == 1:
-                pygame.display.toggle_fullscreen()
+        if joystick_zero:
+            if event.type == pygame.JOYBUTTONDOWN:
+                if joystick_zero.get_button(7) == 1:
+                    stats.game = "game_active"
+                if joystick_zero.get_button(6) == 1:
+                    pygame.quit()
+                    sys.exit()
+                if joystick_zero.get_button(5) == 1:
+                    music_control()
+                if joystick_zero.get_button(4) == 1:
+                    pygame.display.toggle_fullscreen()
+            if stats.start_active:
+                if joystick_zero.get_hat(0)[1] == 1:
+                    car_red.surface = settings.car_red_long_surface
+                    position.surface_left = settings.position_red_long_surface
+                if joystick_zero.get_hat(0)[1] == -1:
+                    car_red.surface = settings.car_red_surface
+                    position.surface_left = settings.position_red_surface
         # первый
-        if event.type == pygame.JOYBUTTONDOWN and joystick_one:
-            if joystick_one.get_button(7) == 1:
-                stats.game = "game_active"
-            if joystick_one.get_button(6) == 1:
-                pygame.quit()
-                sys.exit()
-            if joystick_one.get_button(5) == 1:
-                music_control()
-            if joystick_one.get_button(4) == 1:
-                pygame.display.toggle_fullscreen()
+        if joystick_one:
+            if event.type == pygame.JOYBUTTONDOWN:
+                if joystick_one.get_button(7) == 1:
+                    stats.game = "game_active"
+                if joystick_one.get_button(6) == 1:
+                    pygame.quit()
+                    sys.exit()
+                if joystick_one.get_button(5) == 1:
+                    music_control()
+                if joystick_one.get_button(4) == 1:
+                    pygame.display.toggle_fullscreen()
+            if stats.start_active:
+                if joystick_one.get_hat[1] == 1:
+                    car_green.surface = settings.car_green_long_surface
+                    position.surface_right = settings.position_green_long_surface
+                if joystick_one.get_hat[1] == -1:
+                    car_green.surface = settings.car_green_surface
+                    position.surface_right = settings.position_green_surface
 
 # отслеживание нажатий клавиатуры и джойстика.
 def events_title_active(stats, joystick_zero, joystick_one):

@@ -97,8 +97,14 @@ class Settings():
         self.car_green_surface = pygame.image.load(resource_path('media/car_green.png'))
         self.car_red_surface = pygame.transform.scale(self.car_red_surface, (51,51))
         self.car_green_surface = pygame.transform.scale(self.car_green_surface, (51,51))
+        self.car_red_long_surface = pygame.image.load(resource_path('media/car_red_long.png'))
+        self.car_green_long_surface = pygame.image.load(resource_path('media/car_green_long.png'))
+        self.car_red_long_surface = pygame.transform.scale(self.car_red_long_surface, (51,66))
+        self.car_green_long_surface = pygame.transform.scale(self.car_green_long_surface, (51,66))
         self.position_red_surface = pygame.transform.scale(self.car_red_surface, (25,25))
         self.position_green_surface = pygame.transform.scale(self.car_green_surface, (25,25))
+        self.position_red_long_surface = pygame.transform.scale(self.car_red_long_surface, (25,33))
+        self.position_green_long_surface = pygame.transform.scale(self.car_green_long_surface, (25,33))
         self.start_light_surface = pygame.Surface((self.screen_height / 10, self.screen_height / 10))
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         # Параметры аудио
@@ -124,12 +130,12 @@ class Settings():
         self.bf_car_green = 0.1
         self.sf_car_red = 0.3
         self.sf_car_green = 0.3
+        self.max_speed_car_red = 22
+        self.max_speed_car_green = 22
         self.speed_car_red = 0
         self.speed_car_green = 0
         self.round_speed_car_red = 0
         self.round_speed_car_green = 0
-        self.max_speed_car_red = 22
-        self.max_speed_car_green = 22
         self.distance_car_red = 0
         self.distance_car_green = 0
         self.distance_car_offset = 0
