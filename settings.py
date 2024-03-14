@@ -175,6 +175,7 @@ class Settings():
         self.nitro_chance_increment = 0
         self.truck_chance_increment = 0
         self.crash_timer = len(self.firelist)
+        self.intro_sound.stop()
         self.outro_sound.stop()
         # Титры
         self.first_line = 0

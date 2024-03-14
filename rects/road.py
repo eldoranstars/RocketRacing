@@ -10,10 +10,7 @@ class Road():
         self.rect_left_two = self.surface.get_rect()
         self.rect_right_two = self.surface.get_rect()
         # Получение начальных координат изображения
-        self.rect_left_one.bottomleft = screen.rect.bottomleft
-        self.rect_right_one.bottomright = screen.rect.bottomright
-        self.rect_left_two.bottomleft = self.rect_left_one.topleft
-        self.rect_right_two.bottomright = self.rect_right_one.topright
+        self.new_game()
 
     # Меняем изображения местами, для непрерывной прокрутки дороги
     def update(self):
@@ -29,6 +26,13 @@ class Road():
             self.rect_right_one.bottom = self.rect_right_two.top
         if self.rect_right_two.top > self.screen.rect.bottom:
             self.rect_right_two.bottom = self.rect_right_one.top
+
+    # Исходная позиция
+    def new_game(self):
+        self.rect_left_one.bottomleft = self.screen.rect.bottomleft
+        self.rect_right_one.bottomright = self.screen.rect.bottomright
+        self.rect_left_two.bottomleft = self.rect_left_one.topleft
+        self.rect_right_two.bottomright = self.rect_right_one.topright
 
     # Вывод изображения на экран
     def blitme(self):

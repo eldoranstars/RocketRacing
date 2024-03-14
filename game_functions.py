@@ -27,9 +27,10 @@ position = Position(screen, settings)
 car_red = CarRed(screen, settings)
 car_green = CarGreen(screen, settings)
 pause = Text(screen, "ПАУЗА: Start или P", screen.rect.centerx, screen.rect.centery)
-exit_game = Text(screen, "ВЫХОД из ИГРЫ: Back или ESC", screen.rect.centerx, screen.rect.centery + 80)
+exit_game = Text(screen, "ВЫХОД из ИГРЫ: Back или ESC", screen.rect.centerx, screen.rect.centery + 120)
 cars = Text(screen, "СМЕНА МАШИНЫ: UP/DOWN", screen.rect.centerx, screen.rect.centery + 40)
-buttons = [pause,exit_game,cars]
+maps = Text(screen, "СМЕНА КАРТЫ: LEFT/RIGHT", screen.rect.centerx, screen.rect.centery + 80)
+buttons = [pause,exit_game,cars,maps]
 
 # получаем пиксельную маску для обработки коллизий.
 def overlap_left(player, enemy):
@@ -92,6 +93,7 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
                     position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
                 if event.key == pygame.K_a:
                     road.surface = settings.road_surface
+                    settings.screen_color = (100, 100, 100)
                     settings.truck_surface = settings.ambulance_surface
                     settings.object_ml = settings.tractor_ml
                     settings.object_mr = settings.tractor_mr
@@ -101,6 +103,7 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
                     position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
                 if event.key == pygame.K_d:
                     road.surface = settings.ocean_surface
+                    settings.screen_color = (0, 66, 88)
                     settings.truck_surface = settings.boat_surface
                     settings.object_ml = settings.medusa_ml
                     settings.object_mr = settings.medusa_mr
@@ -110,6 +113,7 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
                     position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
                 if event.key == pygame.K_LEFT:
                     road.surface = settings.road_surface
+                    settings.screen_color = (100, 100, 100)
                     settings.truck_surface = settings.ambulance_surface
                     settings.object_ml = settings.tractor_ml
                     settings.object_mr = settings.tractor_mr
@@ -119,6 +123,7 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
                     position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
                 if event.key == pygame.K_RIGHT:
                     road.surface = settings.ocean_surface
+                    settings.screen_color = (0, 66, 88)
                     settings.truck_surface = settings.boat_surface
                     settings.object_ml = settings.medusa_ml
                     settings.object_mr = settings.medusa_mr
@@ -184,14 +189,20 @@ def events_title_active(stats, joystick_zero, joystick_one):
 def events_game_active(stats, joystick_zero, joystick_one):
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                new_game(stats)
             if event.key == pygame.K_p:
                 stats.game = "not_game_active"
         # нулевой
         if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
+            if joystick_zero.get_button(6) == 1:
+                new_game(stats)
             if joystick_zero.get_button(7) == 1:
                 stats.game = "not_game_active"
         # первый
         if event.type == pygame.JOYBUTTONDOWN and joystick_one:
+            if joystick_one.get_button(6) == 1:
+                new_game(stats)
             if joystick_one.get_button(7) == 1:
                 stats.game = "not_game_active"
 
@@ -199,6 +210,7 @@ def events_game_active(stats, joystick_zero, joystick_one):
 def new_game(stats):
     finish.new_game()
     position.new_game()
+    road.new_game()
     car_red.new_game()
     car_green.new_game()
     settings.new_game()
