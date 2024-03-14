@@ -79,17 +79,53 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
                 stats.game = "game_active"
             if stats.start_active:
                 if event.key == pygame.K_w:
-                    car_red.surface = settings.car_red_long_surface
-                    position.surface_left = settings.position_red_long_surface
+                    car_red.surface = settings.car_red_long_surface if road.surface == settings.road_surface else settings.boat_red_long_surface
+                    position.surface_left = pygame.transform.scale(car_red.surface, (25,33))
                 if event.key == pygame.K_s:
-                    car_red.surface = settings.car_red_surface
-                    position.surface_left = settings.position_red_surface
+                    car_red.surface = settings.car_red_surface if road.surface == settings.road_surface else settings.boat_red_surface
+                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
                 if event.key == pygame.K_UP:
-                    car_green.surface = settings.car_green_long_surface
-                    position.surface_right = settings.position_green_long_surface
+                    car_green.surface = settings.car_green_long_surface if road.surface == settings.road_surface else settings.boat_green_long_surface
+                    position.surface_right = pygame.transform.scale(car_green.surface, (25,33))
                 if event.key == pygame.K_DOWN:
+                    car_green.surface = settings.car_green_surface if road.surface == settings.road_surface else settings.boat_green_surface
+                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+                if event.key == pygame.K_a:
+                    road.surface = settings.road_surface
+                    settings.truck_surface = settings.ambulance_surface
+                    settings.object_ml = settings.tractor_ml
+                    settings.object_mr = settings.tractor_mr
+                    car_red.surface = settings.car_red_surface
                     car_green.surface = settings.car_green_surface
-                    position.surface_right = settings.position_green_surface
+                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+                if event.key == pygame.K_d:
+                    road.surface = settings.ocean_surface
+                    settings.truck_surface = settings.boat_surface
+                    settings.object_ml = settings.medusa_ml
+                    settings.object_mr = settings.medusa_mr
+                    car_red.surface = settings.boat_red_surface
+                    car_green.surface = settings.boat_green_surface
+                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+                if event.key == pygame.K_LEFT:
+                    road.surface = settings.road_surface
+                    settings.truck_surface = settings.ambulance_surface
+                    settings.object_ml = settings.tractor_ml
+                    settings.object_mr = settings.tractor_mr
+                    car_red.surface = settings.car_red_surface
+                    car_green.surface = settings.car_green_surface
+                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+                if event.key == pygame.K_RIGHT:
+                    road.surface = settings.ocean_surface
+                    settings.truck_surface = settings.boat_surface
+                    settings.object_ml = settings.medusa_ml
+                    settings.object_mr = settings.medusa_mr
+                    car_red.surface = settings.boat_red_surface
+                    car_green.surface = settings.boat_green_surface
+                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
         # нулевой
         if joystick_zero:
             if event.type == pygame.JOYBUTTONDOWN:
@@ -105,10 +141,10 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
             if stats.start_active:
                 if joystick_zero.get_hat(0)[1] == 1:
                     car_red.surface = settings.car_red_long_surface
-                    position.surface_left = settings.position_red_long_surface
+                    position.surface_left = settings.position_left_long_surface
                 if joystick_zero.get_hat(0)[1] == -1:
                     car_red.surface = settings.car_red_surface
-                    position.surface_left = settings.position_red_surface
+                    position.surface_left = settings.position_left_surface
         # первый
         if joystick_one:
             if event.type == pygame.JOYBUTTONDOWN:
@@ -124,10 +160,10 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
             if stats.start_active:
                 if joystick_one.get_hat[1] == 1:
                     car_green.surface = settings.car_green_long_surface
-                    position.surface_right = settings.position_green_long_surface
+                    position.surface_right = settings.position_right_long_surface
                 if joystick_one.get_hat[1] == -1:
                     car_green.surface = settings.car_green_surface
-                    position.surface_right = settings.position_green_surface
+                    position.surface_right = settings.position_right_surface
 
 # отслеживание нажатий клавиатуры и джойстика.
 def events_title_active(stats, joystick_zero, joystick_one):

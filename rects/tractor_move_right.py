@@ -8,7 +8,7 @@ class RTractor():
         self.speed = random.randrange(2,6)
         self.rdy_remove = False
         # Загрузка изображения и получение прямоугольника
-        self.surface = random.choice(settings.tractor_mr)
+        self.surface = random.choice(settings.object_mr)
         self.rect_left = self.surface.get_rect()
         self.rect_right = self.surface.get_rect()
         # Получение начальных координат изображения

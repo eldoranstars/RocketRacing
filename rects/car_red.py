@@ -31,7 +31,7 @@ class CarRed():
             self.crash_reload = 0
             self.crash = False
         # учитываем скорость с нитро
-        if self.surface == self.settings.car_red_surface:
+        if self.surface == self.settings.car_red_surface or self.settings.boat_red_surface:
             if self.nitro_reload < self.nitro_timer:
                 self.settings.max_speed_car_red = 33
                 self.settings.sf_car_red = 0.9
@@ -41,7 +41,7 @@ class CarRed():
                 self.settings.sf_car_red = 0.3
                 self.nitro_reload = 0
                 self.nitro_timer = 0
-        if self.surface == self.settings.car_red_long_surface:
+        if self.surface == self.settings.car_red_long_surface or self.settings.boat_red_long_surface:
             if self.nitro_reload < self.nitro_timer:
                 self.settings.max_speed_car_red = 39
                 self.settings.sf_car_red = 0.72

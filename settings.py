@@ -10,7 +10,6 @@ def resource_path(relative_path):
 class Settings():
     def __init__(self):
         pygame.init()
-        pygame.mixer.pre_init(44100,-16,2, 1024)
         # Параметры экрана
         self.screen_width = 1920
         self.screen_height = 1200
@@ -71,14 +70,18 @@ class Settings():
             self.fire32, self.fire33, self.fire34, self.fire35, self.fire36, self.fire37, self.fire38, self.fire39, \
             self.fire40, self.fire41, self.fire42, self.fire43, self.fire44, self.fire45, self.fire46, self.fire47]
         self.road_surface = pygame.image.load(resource_path('media/road.jpg'))
+        self.ocean_surface = pygame.image.load(resource_path('media/ocean.jpg'))
         self.finish_surface = pygame.image.load(resource_path('media/finish.png'))
         self.finish_surface_mid = pygame.transform.scale(self.finish_surface, (140,40))
         self.oil_surface = pygame.image.load(resource_path('media/oil.png'))
         self.oil_surface = pygame.transform.scale(self.oil_surface, (85,50))
         self.nitro_surface = pygame.image.load(resource_path('media/nitro.png'))
         self.nitro_surface = pygame.transform.scale(self.nitro_surface, (40,40))
-        self.truck_surface = pygame.image.load(resource_path('media/truck.png'))
-        self.truck_surface = pygame.transform.scale(self.truck_surface, (45,120))
+        self.ambulance_surface = pygame.image.load(resource_path('media/truck.png'))
+        self.ambulance_surface = pygame.transform.scale(self.ambulance_surface, (45,120))
+        self.boat_surface = pygame.image.load(resource_path('media/boat.png'))
+        self.boat_surface = pygame.transform.scale(self.boat_surface, (45,120))
+        self.truck_surface = self.ambulance_surface
         self.tractor_ml1 = pygame.image.load(resource_path('media/tractor1.png'))
         self.tractor_ml2 = pygame.image.load(resource_path('media/tractor2.png'))
         self.tractor_ml3 = pygame.image.load(resource_path('media/tractor3.png'))
@@ -93,6 +96,22 @@ class Settings():
         self.tractor_mr4 = pygame.transform.flip(self.tractor_ml4, True, False)
         self.tractor_ml = [self.tractor_ml1, self.tractor_ml2, self.tractor_ml3, self.tractor_ml4]
         self.tractor_mr = [self.tractor_mr1, self.tractor_mr2, self.tractor_mr3, self.tractor_mr4]
+        self.medusa_ml1 = pygame.image.load(resource_path('media/medusa1.png'))
+        self.medusa_ml2 = pygame.image.load(resource_path('media/medusa2.png'))
+        self.medusa_ml3 = pygame.image.load(resource_path('media/medusa3.png'))
+        self.medusa_ml4 = pygame.image.load(resource_path('media/medusa4.png'))
+        self.medusa_ml1 = pygame.transform.scale(self.medusa_ml1, (61,49))
+        self.medusa_ml2 = pygame.transform.scale(self.medusa_ml2, (61,49))
+        self.medusa_ml3 = pygame.transform.scale(self.medusa_ml3, (61,49))
+        self.medusa_ml4 = pygame.transform.scale(self.medusa_ml4, (61,49))
+        self.medusa_mr1 = pygame.transform.flip(self.medusa_ml1, True, False)
+        self.medusa_mr2 = pygame.transform.flip(self.medusa_ml2, True, False)
+        self.medusa_mr3 = pygame.transform.flip(self.medusa_ml3, True, False)
+        self.medusa_mr4 = pygame.transform.flip(self.medusa_ml4, True, False)
+        self.medusa_ml = [self.medusa_ml1, self.medusa_ml2, self.medusa_ml3, self.medusa_ml4]
+        self.medusa_mr = [self.medusa_mr1, self.medusa_mr2, self.medusa_mr3, self.medusa_mr4]
+        self.object_ml = self.tractor_ml
+        self.object_mr = self.tractor_mr
         self.car_red_surface = pygame.image.load(resource_path('media/car_red.png'))
         self.car_green_surface = pygame.image.load(resource_path('media/car_green.png'))
         self.car_red_surface = pygame.transform.scale(self.car_red_surface, (51,51))
@@ -101,10 +120,16 @@ class Settings():
         self.car_green_long_surface = pygame.image.load(resource_path('media/car_green_long.png'))
         self.car_red_long_surface = pygame.transform.scale(self.car_red_long_surface, (51,66))
         self.car_green_long_surface = pygame.transform.scale(self.car_green_long_surface, (51,66))
+        self.boat_red_surface = pygame.image.load(resource_path('media/boat_red.png'))
+        self.boat_green_surface = pygame.image.load(resource_path('media/boat_green.png'))
+        self.boat_red_surface = pygame.transform.scale(self.boat_red_surface, (51,51))
+        self.boat_green_surface = pygame.transform.scale(self.boat_green_surface, (51,51))
+        self.boat_red_long_surface = pygame.image.load(resource_path('media/boat_red_long.png'))
+        self.boat_green_long_surface = pygame.image.load(resource_path('media/boat_green_long.png'))
+        self.boat_red_long_surface = pygame.transform.scale(self.boat_red_long_surface, (51,66))
+        self.boat_green_long_surface = pygame.transform.scale(self.boat_green_long_surface, (51,66))
         self.position_red_surface = pygame.transform.scale(self.car_red_surface, (25,25))
         self.position_green_surface = pygame.transform.scale(self.car_green_surface, (25,25))
-        self.position_red_long_surface = pygame.transform.scale(self.car_red_long_surface, (25,33))
-        self.position_green_long_surface = pygame.transform.scale(self.car_green_long_surface, (25,33))
         self.start_light_surface = pygame.Surface((self.screen_height / 10, self.screen_height / 10))
         self.screen_surface = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.SCALED)
         # Параметры аудио
