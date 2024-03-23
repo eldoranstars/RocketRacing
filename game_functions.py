@@ -121,6 +121,42 @@ def switch_theme(event):
     if event.key == pygame.K_RIGHT:
         swtich_to_ocean()
 
+def switch_theme_joystick_zero(joystick_zero):
+    if joystick_zero.get_hat(0)[1] == 1:
+        if road.surface == settings.road_surface:
+            car_red.surface = settings.car_red_long_surface
+        if road.surface == settings.ocean_surface:
+            car_red.surface = settings.boat_red_long_surface
+        position.surface_left = pygame.transform.scale(car_red.surface, (25,33))
+    if joystick_zero.get_hat(0)[1] == -1:
+        if road.surface == settings.road_surface:
+            car_red.surface = settings.car_red_surface
+        if road.surface == settings.ocean_surface:
+            car_red.surface = settings.boat_red_surface
+        position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+    if joystick_zero.get_hat(0)[0] == -1:
+        swtich_to_asphalt()
+    if joystick_zero.get_hat(0)[0] == 1:
+        swtich_to_ocean()
+
+def switch_theme_joystick_one(joystick_one):
+    if joystick_one.get_hat(0)[1] == 1:
+        if road.surface == settings.road_surface:
+            car_green.surface = settings.car_green_long_surface
+        if road.surface == settings.ocean_surface:
+            car_green.surface = settings.boat_green_long_surface
+        position.surface_right = pygame.transform.scale(car_green.surface, (25,33))
+    if joystick_one.get_hat(0)[1] == -1:
+        if road.surface == settings.road_surface:
+            car_green.surface = settings.car_green_surface
+        if road.surface == settings.ocean_surface:
+            car_green.surface = settings.boat_green_surface
+        position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+    if joystick_one.get_hat(0)[0] == -1:
+        swtich_to_asphalt()
+    if joystick_one.get_hat(0)[0] == 1:
+        swtich_to_ocean()
+
 # отслеживание нажатий клавиатуры и джойстика.
 def events_not_game_active(stats, joystick_zero, joystick_one):
     for event in pygame.event.get():
@@ -149,12 +185,7 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
                 if joystick_zero.get_button(4) == 1:
                     pygame.display.toggle_fullscreen()
             if stats.start_active:
-                if joystick_zero.get_hat(0)[1] == 1:
-                    car_red.surface = settings.car_red_long_surface
-                    position.surface_left = settings.position_left_long_surface
-                if joystick_zero.get_hat(0)[1] == -1:
-                    car_red.surface = settings.car_red_surface
-                    position.surface_left = settings.position_left_surface
+                switch_theme_joystick_zero(joystick_zero)
         # первый
         if joystick_one:
             if event.type == pygame.JOYBUTTONDOWN:
@@ -168,12 +199,7 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
                 if joystick_one.get_button(4) == 1:
                     pygame.display.toggle_fullscreen()
             if stats.start_active:
-                if joystick_one.get_hat[1] == 1:
-                    car_green.surface = settings.car_green_long_surface
-                    position.surface_right = settings.position_right_long_surface
-                if joystick_one.get_hat[1] == -1:
-                    car_green.surface = settings.car_green_surface
-                    position.surface_right = settings.position_right_surface
+                switch_theme_joystick_one(joystick_one)
 
 # отслеживание нажатий клавиатуры и джойстика.
 def events_title_active(stats, joystick_zero, joystick_one):
