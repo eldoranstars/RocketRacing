@@ -16,6 +16,8 @@ class Text():
         self.rect.bottom = posy
 
     def update_text(self, score):
+        # format запихнет score в {:}
+        # после : внутри {} добавляем информацию по форматированию
         self.score_msg = self.msg.format(score)
         self.surface = self.font.render(self.score_msg, True, self.text_color)
 
