@@ -19,7 +19,7 @@ class StartLight():
 
     # Исходная позиция
     def new_game(self):
-        # self.surface.fill(self.settings.screen_color)
+        self.surface.fill((0,0,0))
         self.start_light_timer = 0
         self.start_light = True
         self.start_light_red = False

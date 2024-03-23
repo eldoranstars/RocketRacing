@@ -65,6 +65,62 @@ def music_control():
         settings.music_active = True
         pygame.mixer.unpause()
 
+def swtich_to_ocean():
+    road.surface = settings.ocean_surface
+    settings.screen_color = (0, 66, 88)
+    settings.truck_surface = settings.boat_surface
+    settings.object_ml = settings.medusa_ml
+    settings.object_mr = settings.medusa_mr
+    car_red.surface = settings.boat_red_surface
+    car_green.surface = settings.boat_green_surface
+    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+
+def swtich_to_asphalt():
+    road.surface = settings.road_surface
+    settings.screen_color = (100, 100, 100)
+    settings.truck_surface = settings.ambulance_surface
+    settings.object_ml = settings.tractor_ml
+    settings.object_mr = settings.tractor_mr
+    car_red.surface = settings.car_red_surface
+    car_green.surface = settings.car_green_surface
+    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+
+def switch_theme(event):
+    if event.key == pygame.K_w:
+        if road.surface == settings.road_surface:
+            car_red.surface = settings.car_red_long_surface
+        if road.surface == settings.ocean_surface:
+            car_red.surface = settings.boat_red_long_surface
+        position.surface_left = pygame.transform.scale(car_red.surface, (25,33))
+    if event.key == pygame.K_s:
+        if road.surface == settings.road_surface:
+            car_red.surface = settings.car_red_surface
+        if road.surface == settings.ocean_surface:
+            car_red.surface = settings.boat_red_surface
+        position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+    if event.key == pygame.K_UP:
+        if road.surface == settings.road_surface:
+            car_green.surface = settings.car_green_long_surface
+        if road.surface == settings.ocean_surface:
+            car_green.surface = settings.boat_green_long_surface
+        position.surface_right = pygame.transform.scale(car_green.surface, (25,33))
+    if event.key == pygame.K_DOWN:
+        if road.surface == settings.road_surface:
+            car_green.surface = settings.car_green_surface
+        if road.surface == settings.ocean_surface:
+            car_green.surface = settings.boat_green_surface
+        position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+    if event.key == pygame.K_a:
+        swtich_to_asphalt()
+    if event.key == pygame.K_d:
+        swtich_to_ocean()
+    if event.key == pygame.K_LEFT:
+        swtich_to_asphalt()
+    if event.key == pygame.K_RIGHT:
+        swtich_to_ocean()
+
 # отслеживание нажатий клавиатуры и джойстика.
 def events_not_game_active(stats, joystick_zero, joystick_one):
     for event in pygame.event.get():
@@ -79,58 +135,7 @@ def events_not_game_active(stats, joystick_zero, joystick_one):
             if event.key == pygame.K_p:
                 stats.game = "game_active"
             if stats.start_active:
-                if event.key == pygame.K_w:
-                    car_red.surface = settings.car_red_long_surface if road.surface == settings.road_surface else settings.boat_red_long_surface
-                    position.surface_left = pygame.transform.scale(car_red.surface, (25,33))
-                if event.key == pygame.K_s:
-                    car_red.surface = settings.car_red_surface if road.surface == settings.road_surface else settings.boat_red_surface
-                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
-                if event.key == pygame.K_UP:
-                    car_green.surface = settings.car_green_long_surface if road.surface == settings.road_surface else settings.boat_green_long_surface
-                    position.surface_right = pygame.transform.scale(car_green.surface, (25,33))
-                if event.key == pygame.K_DOWN:
-                    car_green.surface = settings.car_green_surface if road.surface == settings.road_surface else settings.boat_green_surface
-                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
-                if event.key == pygame.K_a:
-                    road.surface = settings.road_surface
-                    settings.screen_color = (100, 100, 100)
-                    settings.truck_surface = settings.ambulance_surface
-                    settings.object_ml = settings.tractor_ml
-                    settings.object_mr = settings.tractor_mr
-                    car_red.surface = settings.car_red_surface
-                    car_green.surface = settings.car_green_surface
-                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
-                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
-                if event.key == pygame.K_d:
-                    road.surface = settings.ocean_surface
-                    settings.screen_color = (0, 66, 88)
-                    settings.truck_surface = settings.boat_surface
-                    settings.object_ml = settings.medusa_ml
-                    settings.object_mr = settings.medusa_mr
-                    car_red.surface = settings.boat_red_surface
-                    car_green.surface = settings.boat_green_surface
-                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
-                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
-                if event.key == pygame.K_LEFT:
-                    road.surface = settings.road_surface
-                    settings.screen_color = (100, 100, 100)
-                    settings.truck_surface = settings.ambulance_surface
-                    settings.object_ml = settings.tractor_ml
-                    settings.object_mr = settings.tractor_mr
-                    car_red.surface = settings.car_red_surface
-                    car_green.surface = settings.car_green_surface
-                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
-                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
-                if event.key == pygame.K_RIGHT:
-                    road.surface = settings.ocean_surface
-                    settings.screen_color = (0, 66, 88)
-                    settings.truck_surface = settings.boat_surface
-                    settings.object_ml = settings.medusa_ml
-                    settings.object_mr = settings.medusa_mr
-                    car_red.surface = settings.boat_red_surface
-                    car_green.surface = settings.boat_green_surface
-                    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
-                    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+                switch_theme(event)
         # нулевой
         if joystick_zero:
             if event.type == pygame.JOYBUTTONDOWN:
@@ -189,20 +194,14 @@ def events_title_active(stats, joystick_zero, joystick_one):
 def events_game_active(stats, joystick_zero, joystick_one):
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                new_game(stats)
             if event.key == pygame.K_p:
                 stats.game = "not_game_active"
         # нулевой
         if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
-            if joystick_zero.get_button(6) == 1:
-                new_game(stats)
             if joystick_zero.get_button(7) == 1:
                 stats.game = "not_game_active"
         # первый
         if event.type == pygame.JOYBUTTONDOWN and joystick_one:
-            if joystick_one.get_button(6) == 1:
-                new_game(stats)
             if joystick_one.get_button(7) == 1:
                 stats.game = "not_game_active"
 
