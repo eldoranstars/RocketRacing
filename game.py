@@ -13,13 +13,22 @@ while True:
     clock.tick(30)
     joystick_zero = pygame.joystick.Joystick(0) if pygame.joystick.get_count() > 0 else ''
     joystick_one = pygame.joystick.Joystick(1) if pygame.joystick.get_count() > 1 else ''
-    gf.check_events(stats, joystick_zero, joystick_one)
-    gf.blit_screen(stats)
-    if stats.title_active and not stats.game_active:
+    gf.blit_screen()
+    if stats.game == "game_active":
+        gf.events_game_active(stats, joystick_zero, joystick_one)
+        if stats.start_active:
+            gf.start_light.blitme()
+            gf.start_light.update(stats)
+        else:
+            gf.update_cars(joystick_zero, joystick_one)
+            gf.update_rects(stats)
+            gf.remove_rects()
+            gf.append_rects()
+    if stats.game == "not_game_active":
+        gf.blit_screen_not_game_active()
+        gf.events_not_game_active(stats, joystick_zero, joystick_one)
+    if stats.game == "title_active":
+        gf.blit_screen_title_active()
+        gf.events_title_active(stats, joystick_zero, joystick_one)
         gf.update_title_text()
         gf.append_messages()
-    if stats.game_active:
-        gf.update_cars(joystick_zero, joystick_one)
-        gf.update_rects(stats)
-        gf.remove_rects()
-        gf.append_rects()

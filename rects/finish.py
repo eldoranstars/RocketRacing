@@ -6,10 +6,12 @@ class Finish():
         # Загрузка изображения и получение прямоугольника
         self.surface = settings.finish_surface
         self.surface_mid = settings.finish_surface_mid
+        self.surface_position = settings.position_red_surface
         self.surface_car = settings.car_red_surface
         self.rect_left = self.surface.get_rect()
         self.rect_right = self.surface.get_rect()
         self.rect_mid = self.surface_mid.get_rect()
+        self.rect_position = self.surface_position.get_rect()
         self.rect_car = self.surface_car.get_rect()
         # Получение начальных координат изображения
         self.new_game()
@@ -23,16 +25,15 @@ class Finish():
         self.rect_left.top += self.settings.round_speed_car_red
         self.rect_right.top += self.settings.round_speed_car_green
         if self.rect_left.bottom > self.screen.rect.h / 2 or self.rect_right.bottom > self.screen.rect.h / 2:
-            stats.title_active = True
-            stats.game_active = False
+            stats.game = "title_active"
             self.settings.intro_sound.stop()
             self.settings.outro_sound.play(-1)
 
     # Исходная позиция
     def new_game(self):
-        self.distance_position = (self.screen.rect.h - self.rect_mid.h) * self.settings.distance_factor
-        self.rect_left.bottom = self.screen.rect.h / 2 - self.rect_car.h / 2 - self.distance_position
-        self.rect_right.bottom = self.screen.rect.h / 2 - self.rect_car.h / 2 - self.distance_position
+        self.distance_to_finish = (self.screen.rect.h - self.rect_mid.h - self.rect_position.h) * self.settings.distance_factor
+        self.rect_left.bottom = self.screen.rect.h / 2 - self.rect_car.h / 2 - self.distance_to_finish
+        self.rect_right.bottom = self.screen.rect.h / 2 - self.rect_car.h / 2 - self.distance_to_finish
 
     # Вывод изображения на экран
     def blitme(self):

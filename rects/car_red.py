@@ -3,14 +3,9 @@ class CarRed():
         # Атрибуты класса
         self.screen = screen
         self.settings = settings
-        self.crash_reload = 0
-        self.nitro_reload = 0
-        self.nitro_timer = 0
-        self.crash = False
-        self.bang = False
         # Загрузка изображения и получение прямоугольника
         self.surface = settings.car_red_surface
-        self.fire_surface = settings.firelist[-1]
+        self.fire_surface = settings.fire00
         self.rect_fire_origin = self.fire_surface.get_rect()
         self.rect_fire_mirror = self.fire_surface.get_rect()
         self.rect_left = self.surface.get_rect()
@@ -31,23 +26,42 @@ class CarRed():
             self.rect_fire_mirror.center = self.rect_right.center
             self.fire_surface = self.settings.firelist[self.crash_reload]
             self.crash_reload += 1
-        else:
-            self.fire_surface = self.settings.firelist[-1]
+        elif self.crash:
+            self.fire_surface = self.settings.fire00
             self.crash_reload = 0
             self.crash = False
-        # учитываем скорость с нитро
+        # проверяем таймер нитро
         if self.nitro_reload < self.nitro_timer:
-            self.settings.max_speed_car_red = 33
-            self.settings.sf_car_red = 1
             self.nitro_reload += 1
-        else:
-            self.settings.max_speed_car_red = 22
-            self.settings.sf_car_red = 0.3
-            self.nitro_reload = 0
-            self.nitro_timer = 0
+        if self.nitro_reload > self.nitro_timer:
+            if self.surface == self.settings.car_red_surface or self.surface == self.settings.boat_red_surface:
+                self.settings.max_speed_car_red = 22
+                self.settings.sf_car_red = 0.3
+                self.nitro_reload = 0
+                self.nitro_timer = 0
+            if self.surface == self.settings.car_red_long_surface or self.surface == self.settings.boat_red_long_surface:
+                self.settings.max_speed_car_red = 26
+                self.settings.sf_car_red = 0.24
+                self.nitro_reload = 0
+                self.nitro_timer = 0
+
+    # подбираем нитро
+    def take_nitro(self):
+        self.nitro_timer += 60
+        if self.surface == self.settings.car_red_surface or self.surface == self.settings.boat_red_surface:
+            self.settings.max_speed_car_red = 33
+            self.settings.sf_car_red = 0.9
+        if self.surface == self.settings.car_red_long_surface or self.surface == self.settings.boat_red_long_surface:
+            self.settings.max_speed_car_red = 39
+            self.settings.sf_car_red = 0.72
 
     # Исходная позиция
     def new_game(self):
+        self.crash_reload = 0
+        self.nitro_reload = 0
+        self.nitro_timer = 0
+        self.crash = False
+        self.bang = False
         self.rect_left.centerx = self.screen.rect.centerx / 4
         self.rect_right.centerx = self.screen.rect.centerx + self.screen.rect.centerx / 2
         self.rect_right.centery = self.screen.rect.centery

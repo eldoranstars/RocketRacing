@@ -11,123 +11,238 @@ from position import Position
 from oil import Oil
 from nitro import Nitro
 from truck import Truck
+from mine import Mine
 from finish import Finish
 from tractor_move_right import RTractor
 from tractor_move_left import LTractor
 from car_red import CarRed
 from car_green import CarGreen
+from start_light import StartLight
 
 settings = Settings()
 screen = Screen(settings)
 road = Road(screen, settings)
+start_light = StartLight(screen, settings)
 finish = Finish(screen, settings)
 position = Position(screen, settings)
 car_red = CarRed(screen, settings)
 car_green = CarGreen(screen, settings)
-pause = Text(screen, "PAUSE: P or Start button", screen.rect.centerx, screen.rect.centery)
-buttons = [pause]
+pause = Text(screen, "ПАУЗА: Start или P", screen.rect.centerx, screen.rect.centery)
+exit_game = Text(screen, "ВЫХОД из ИГРЫ: Back или ESC", screen.rect.centerx, screen.rect.centery + 120)
+cars = Text(screen, "СМЕНА МАШИНЫ: UP/DOWN", screen.rect.centerx, screen.rect.centery + 40)
+maps = Text(screen, "СМЕНА КАРТЫ: LEFT/RIGHT", screen.rect.centerx, screen.rect.centery + 80)
+buttons = [pause,exit_game,cars,maps]
 
-# Получаем пиксельную маску для обработки коллизий.
+# получаем пиксельную маску для обработки коллизий.
 def overlap_left(player, enemy):
     player.mask = pygame.mask.from_surface(player.surface)
     enemy.mask = pygame.mask.from_surface(enemy.surface)
     overlap = player.mask.overlap(enemy.mask, (enemy.rect_left.left - player.rect_left.left, enemy.rect_left.top - player.rect_left.top))
     return overlap
 
-# Получаем пиксельную маску для обработки коллизий.
+# получаем пиксельную маску для обработки коллизий.
 def overlap_right(player, enemy):
     player.mask = pygame.mask.from_surface(player.surface)
     enemy.mask = pygame.mask.from_surface(enemy.surface)
     overlap = player.mask.overlap(enemy.mask, (enemy.rect_right.left - player.rect_left.left, enemy.rect_right.top - player.rect_left.top))
     return overlap
 
+# получаем дополнительный прямоугольник для обработки коллизий.
 def collision(rect, wm, hm):
-    # Получаем дополнительный прямоугольник для обработки коллизий.
     collision = pygame.Rect(rect.center, (rect.width * wm, rect.height * hm))
     collision.center = rect.center
     return collision
 
-# Вывод коллизий на экран.
+# вывод коллизий на экран.
 def collision_test(object, wm, hm):
     screen.surface.blit(pygame.Surface((collision(object.rect, wm, hm).width,collision(object.rect, wm, hm).height)), collision(object.rect, wm, hm))
 
-# Отслеживание нажатий клавиатуры и джойстика.
-def check_events(stats, joystick_zero, joystick_one):
-    if stats.game_active:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    stats.game_active = False
-            if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
+# управление фоновой музыкой
+def music_control():
+    if settings.music_active:
+        settings.music_active = False
+        pygame.mixer.pause()
+    else:
+        settings.music_active = True
+        pygame.mixer.unpause()
+
+def swtich_to_ocean():
+    road.surface = settings.ocean_surface
+    settings.screen_color = (0, 66, 88)
+    settings.truck_surface = settings.boat_surface
+    settings.object_ml = settings.medusa_ml
+    settings.object_mr = settings.medusa_mr
+    car_red.surface = settings.boat_red_surface
+    car_green.surface = settings.boat_green_surface
+    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+
+def swtich_to_asphalt():
+    road.surface = settings.road_surface
+    settings.screen_color = (100, 100, 100)
+    settings.truck_surface = settings.ambulance_surface
+    settings.object_ml = settings.tractor_ml
+    settings.object_mr = settings.tractor_mr
+    car_red.surface = settings.car_red_surface
+    car_green.surface = settings.car_green_surface
+    position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+    position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+
+def switch_theme(event):
+    if event.key == pygame.K_w:
+        if road.surface == settings.road_surface:
+            car_red.surface = settings.car_red_long_surface
+        if road.surface == settings.ocean_surface:
+            car_red.surface = settings.boat_red_long_surface
+        position.surface_left = pygame.transform.scale(car_red.surface, (25,33))
+    if event.key == pygame.K_s:
+        if road.surface == settings.road_surface:
+            car_red.surface = settings.car_red_surface
+        if road.surface == settings.ocean_surface:
+            car_red.surface = settings.boat_red_surface
+        position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+    if event.key == pygame.K_UP:
+        if road.surface == settings.road_surface:
+            car_green.surface = settings.car_green_long_surface
+        if road.surface == settings.ocean_surface:
+            car_green.surface = settings.boat_green_long_surface
+        position.surface_right = pygame.transform.scale(car_green.surface, (25,33))
+    if event.key == pygame.K_DOWN:
+        if road.surface == settings.road_surface:
+            car_green.surface = settings.car_green_surface
+        if road.surface == settings.ocean_surface:
+            car_green.surface = settings.boat_green_surface
+        position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+    if event.key == pygame.K_a:
+        swtich_to_asphalt()
+    if event.key == pygame.K_d:
+        swtich_to_ocean()
+    if event.key == pygame.K_LEFT:
+        swtich_to_asphalt()
+    if event.key == pygame.K_RIGHT:
+        swtich_to_ocean()
+
+def switch_theme_joystick_zero(joystick_zero):
+    if joystick_zero.get_hat(0)[1] == 1:
+        if road.surface == settings.road_surface:
+            car_red.surface = settings.car_red_long_surface
+        if road.surface == settings.ocean_surface:
+            car_red.surface = settings.boat_red_long_surface
+        position.surface_left = pygame.transform.scale(car_red.surface, (25,33))
+    if joystick_zero.get_hat(0)[1] == -1:
+        if road.surface == settings.road_surface:
+            car_red.surface = settings.car_red_surface
+        if road.surface == settings.ocean_surface:
+            car_red.surface = settings.boat_red_surface
+        position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
+    if joystick_zero.get_hat(0)[0] == -1:
+        swtich_to_asphalt()
+    if joystick_zero.get_hat(0)[0] == 1:
+        swtich_to_ocean()
+
+def switch_theme_joystick_one(joystick_one):
+    if joystick_one.get_hat(0)[1] == 1:
+        if road.surface == settings.road_surface:
+            car_green.surface = settings.car_green_long_surface
+        if road.surface == settings.ocean_surface:
+            car_green.surface = settings.boat_green_long_surface
+        position.surface_right = pygame.transform.scale(car_green.surface, (25,33))
+    if joystick_one.get_hat(0)[1] == -1:
+        if road.surface == settings.road_surface:
+            car_green.surface = settings.car_green_surface
+        if road.surface == settings.ocean_surface:
+            car_green.surface = settings.boat_green_surface
+        position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
+    if joystick_one.get_hat(0)[0] == -1:
+        swtich_to_asphalt()
+    if joystick_one.get_hat(0)[0] == 1:
+        swtich_to_ocean()
+
+# отслеживание нажатий клавиатуры и джойстика.
+def events_not_game_active(stats, joystick_zero, joystick_one):
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+            if event.key == pygame.K_m:
+                music_control()
+            if event.key == pygame.K_f:
+                pygame.display.toggle_fullscreen()
+            if event.key == pygame.K_p:
+                stats.game = "game_active"
+            if stats.start_active:
+                switch_theme(event)
+        # нулевой
+        if joystick_zero:
+            if event.type == pygame.JOYBUTTONDOWN:
                 if joystick_zero.get_button(7) == 1:
-                    stats.game_active = False
-            if event.type == pygame.JOYBUTTONDOWN and joystick_one:
-                if joystick_one.get_button(7) == 1:
-                    stats.game_active = False
-    if not stats.game_active:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-                if event.key == pygame.K_m:
-                    if stats.music_active:
-                        stats.music_active = False
-                        pygame.mixer.pause()
-                    else:
-                        stats.music_active = True
-                        pygame.mixer.unpause()
-                if event.key == pygame.K_f:
-                    pygame.display.toggle_fullscreen()
-                if event.key == pygame.K_p:
-                    stats.game_active = True
-                    if stats.title_active:
-                        new_game(stats)
-            # нулевой
-            if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
+                    stats.game = "game_active"
                 if joystick_zero.get_button(6) == 1:
                     pygame.quit()
                     sys.exit()
                 if joystick_zero.get_button(5) == 1:
-                    if stats.music_active:
-                        stats.music_active = False
-                        pygame.mixer.pause()
-                    else:
-                        stats.music_active = True
-                        pygame.mixer.unpause()
+                    music_control()
                 if joystick_zero.get_button(4) == 1:
                     pygame.display.toggle_fullscreen()
-                if joystick_zero.get_button(7) == 1:
-                    stats.game_active = True
-                    if stats.title_active:
-                        new_game(stats)
-            # первый
-            if event.type == pygame.JOYBUTTONDOWN and joystick_one:
+            if stats.start_active:
+                switch_theme_joystick_zero(joystick_zero)
+        # первый
+        if joystick_one:
+            if event.type == pygame.JOYBUTTONDOWN:
+                if joystick_one.get_button(7) == 1:
+                    stats.game = "game_active"
                 if joystick_one.get_button(6) == 1:
                     pygame.quit()
                     sys.exit()
                 if joystick_one.get_button(5) == 1:
-                    if stats.music_active:
-                        stats.music_active = False
-                        pygame.mixer.pause()
-                    else:
-                        stats.music_active = True
-                        pygame.mixer.unpause()
+                    music_control()
                 if joystick_one.get_button(4) == 1:
                     pygame.display.toggle_fullscreen()
-                if joystick_one.get_button(7) == 1:
-                    stats.game_active = True
-                    if stats.title_active:
-                        new_game(stats)
+            if stats.start_active:
+                switch_theme_joystick_one(joystick_one)
+
+# отслеживание нажатий клавиатуры и джойстика.
+def events_title_active(stats, joystick_zero, joystick_one):
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                new_game(stats)
+        # нулевой
+        if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
+            if joystick_zero.get_button(7) == 1:
+                new_game(stats)
+        # первый
+        if event.type == pygame.JOYBUTTONDOWN and joystick_one:
+            if joystick_one.get_button(7) == 1:
+                new_game(stats)
+
+# отслеживание нажатий клавиатуры и джойстика.
+def events_game_active(stats, joystick_zero, joystick_one):
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                stats.game = "not_game_active"
+        # нулевой
+        if event.type == pygame.JOYBUTTONDOWN and joystick_zero:
+            if joystick_zero.get_button(7) == 1:
+                stats.game = "not_game_active"
+        # первый
+        if event.type == pygame.JOYBUTTONDOWN and joystick_one:
+            if joystick_one.get_button(7) == 1:
+                stats.game = "not_game_active"
 
 # запуск новой игры
 def new_game(stats):
     finish.new_game()
     position.new_game()
+    road.new_game()
     car_red.new_game()
     car_green.new_game()
     settings.new_game()
-    stats.title_active = False
+    start_light.new_game()
+    stats.game = "not_game_active"
+    stats.start_active = True
 
 def update_cars(joystick_zero, joystick_one):
     # pygame.key.get_pressed() используется для непрерывнной реакции на зажатые клавиши
@@ -192,7 +307,8 @@ def update_rects(stats):
             car_green.crash = True
             car_green.bang = True
         for truck in settings.trucks:
-            tractor.speed = 0 if overlap_left(truck, tractor) else 5
+            tractor.speed = 0 if truck.rect_left.colliderect(tractor.rect_left) else 5
+            tractor.rdy_remove = True if truck.rect_left.collidepoint(tractor.rect_left.center) else False
     for tractor in settings.tractors_move_left:
         tractor.update()
         if overlap_left(car_red, tractor) and not car_red.crash:
@@ -204,7 +320,8 @@ def update_rects(stats):
             car_green.crash = True
             car_green.bang = True
         for truck in settings.trucks:
-            tractor.speed = 0 if overlap_left(truck, tractor) else 5
+            tractor.speed = 0 if truck.rect_left.colliderect(tractor.rect_left) else 5
+            tractor.rdy_remove = True if truck.rect_left.collidepoint(tractor.rect_left.center) else False
     for oil in settings.oils:
         oil.update()
         if overlap_left(car_red, oil):
@@ -215,10 +332,10 @@ def update_rects(stats):
         nitro.update()
         if overlap_left(car_red, nitro):
             nitro.rdy_remove = True
-            car_red.nitro_timer += 60
+            car_red.take_nitro()
         if overlap_right(car_green, nitro):
             nitro.rdy_remove = True
-            car_green.nitro_timer += 60
+            car_green.take_nitro()
     for truck in settings.trucks:
         truck.update()
         if overlap_left(car_red, truck):
@@ -231,6 +348,19 @@ def update_rects(stats):
             car_green.crash = True
             car_green.bang = True
             truck.rdy_remove = True
+    for mine in settings.mines:
+        mine.update()
+        if mine.status == "drift":
+            if overlap_left(car_red, mine):
+                settings.speed_car_red = 0
+                car_red.crash = True
+                car_red.bang = True
+                mine.rdy_remove = True
+            if overlap_right(car_green, mine):
+                settings.speed_car_green = 0
+                car_green.crash = True
+                car_green.bang = True
+                mine.rdy_remove = True
 
 # добавляем объекты в списки
 def append_rects():
@@ -259,6 +389,11 @@ def append_rects():
         truck = Truck(screen, settings)
         settings.trucks.append(truck)
         settings.truck_chance_increment += 2000
+    mine_chance_to_appear = (max_distance - settings.mine_chance_increment) / 100
+    if random.randrange(0,100) < mine_chance_to_appear and road.surface == settings.ocean_surface:
+        mine = Mine(screen, settings)
+        settings.mines.append(mine)
+        settings.mine_chance_increment += 1000
 
 # Обновить расположение объектов на экране.
 def update_title_text():
@@ -281,13 +416,16 @@ def remove_rects():
         nitro.remove()
     for truck in settings.trucks:
         truck.remove()
+    for mine in settings.mines:
+        mine.remove()
     for tractor in settings.tractors_move_right:
         tractor.remove()
     for tractor in settings.tractors_move_left:
         tractor.remove()
 
 # Вывод изображений на экран.
-def blit_screen(stats):
+def blit_screen():
+    pygame.display.update()
     screen.blitme()
     road.blitme()
     finish.blitme()
@@ -296,6 +434,8 @@ def blit_screen(stats):
         oil.blitme()
     for nitro in settings.nitros:
         nitro.blitme()
+    for mine in settings.mines:
+        mine.blitme()
     for tractor in settings.tractors_move_right:
         tractor.blitme()
     for tractor in settings.tractors_move_left:
@@ -304,10 +444,13 @@ def blit_screen(stats):
         truck.blitme()
     car_red.blitme()
     car_green.blitme()
-    if not stats.game_active and not stats.title_active:
-        for button in buttons:
-            button.blitme()
-    if stats.title_active:
-        for message in settings.title_text:
-            message.blitme()
-    pygame.display.update()
+
+# Вывод изображений на экран.
+def blit_screen_not_game_active():
+    for button in buttons:
+        button.blitme()
+
+# Вывод изображений на экран.
+def blit_screen_title_active():
+    for message in settings.title_text:
+        message.blitme()

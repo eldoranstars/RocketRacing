@@ -13,7 +13,6 @@ class Nitro():
         # Получение начальных координат изображения
         self.rect_left.centerx = random.randrange(120, 600, 80)
         self.rect_right.left = self.rect_left.left + 1200
-        self.rect_left.bottom = - 1200
         if settings.distance_car_red > settings.distance_car_green:
             self.rect_left.bottom = 0
             self.rect_right.bottom = - settings.distance_car_offset
