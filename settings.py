@@ -279,6 +279,7 @@ class Settings():
         self.truck_chance_increment = 0
         self.mine_chance_increment = 0
         self.crash_timer = len(self.firelist)
+        self.mine_timer = len(self.minelist)
         self.intro_sound.stop()
         self.outro_sound.stop()
         # Титры

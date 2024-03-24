@@ -6,8 +6,9 @@ class Mine():
         self.screen = screen
         self.settings = settings
         self.rdy_remove = False
-        self.rdy_blowup = False
-        self.crash_reload = 0
+        self.status = "rise"
+        self.mine_reload = 0
+        self.blowup_reload = 0
         # Загрузка изображения и получение прямоугольника
         self.surface = settings.mine00
         self.rect_left = self.surface.get_rect()
@@ -32,11 +33,24 @@ class Mine():
     def update(self):
         self.rect_left.top += self.settings.round_speed_car_red
         self.rect_right.top += self.settings.round_speed_car_green
-        if not self.rdy_blowup and self.crash_reload < self.settings.crash_timer:
-            self.surface = self.settings.minelist[self.crash_reload]
-            self.crash_reload += 1
-        else:
-            self.rdy_blowup = True
+        # мина всплывает
+        if self.status == "rise" and self.mine_reload < self.settings.mine_timer:
+            self.surface = self.settings.minelist[self.mine_reload]
+            self.mine_reload += 1
+        elif self.status == "rise":
+            self.status = "drift"
+        # мина дрейфует
+        if self.status == "drift" and self.blowup_reload < self.settings.mine_timer:
+            self.blowup_reload += 1
+        elif self.status == "drift":
+            self.status = "down"
+        # мина тонет
+        if self.status == "down" and self.mine_reload > 0:
+            self.mine_reload -= 1
+            self.surface = self.settings.minelist[self.mine_reload]
+        elif self.status == "down":
+            self.mine_reload = 0
+            self.status = "rise"
 
     # Вывод изображения на экран
     def blitme(self):

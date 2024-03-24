@@ -5,7 +5,7 @@ class CarRed():
         self.settings = settings
         # Загрузка изображения и получение прямоугольника
         self.surface = settings.car_red_surface
-        self.fire_surface = settings.firelist[-1]
+        self.fire_surface = settings.fire00
         self.rect_fire_origin = self.fire_surface.get_rect()
         self.rect_fire_mirror = self.fire_surface.get_rect()
         self.rect_left = self.surface.get_rect()
@@ -26,8 +26,8 @@ class CarRed():
             self.rect_fire_mirror.center = self.rect_right.center
             self.fire_surface = self.settings.firelist[self.crash_reload]
             self.crash_reload += 1
-        else:
-            self.fire_surface = self.settings.firelist[-1]
+        elif self.crash:
+            self.fire_surface = self.settings.fire00
             self.crash_reload = 0
             self.crash = False
         # учитываем скорость с нитро

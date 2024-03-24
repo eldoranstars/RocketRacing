@@ -350,7 +350,7 @@ def update_rects(stats):
             truck.rdy_remove = True
     for mine in settings.mines:
         mine.update()
-        if mine.rdy_blowup:
+        if mine.status == "drift":
             if overlap_left(car_red, mine):
                 settings.speed_car_red = 0
                 car_red.crash = True
