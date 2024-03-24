@@ -33,7 +33,7 @@ class CarGreen():
         # проверяем таймер нитро
         if self.nitro_reload < self.nitro_timer:
             self.nitro_reload += 1
-        if self.nitro_reload > self.nitro_timer:
+        if self.nitro_reload == self.nitro_timer:
             if self.surface == self.settings.car_green_surface or self.surface == self.settings.boat_green_surface:
                 self.settings.max_speed_car_green = 22
                 self.settings.sf_car_green = 0.3
