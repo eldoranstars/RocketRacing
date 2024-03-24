@@ -33,7 +33,7 @@ class CarRed():
         # проверяем таймер нитро
         if self.nitro_reload < self.nitro_timer:
             self.nitro_reload += 1
-        if self.nitro_reload > self.nitro_timer:
+        if self.nitro_reload == self.nitro_timer:
             if self.surface == self.settings.car_red_surface or self.surface == self.settings.boat_red_surface:
                 self.settings.max_speed_car_red = 22
                 self.settings.sf_car_red = 0.3

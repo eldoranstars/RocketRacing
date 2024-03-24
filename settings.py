@@ -12,7 +12,7 @@ class Settings():
         pygame.init()
         # Параметры экрана
         self.screen_width = 1920
-        self.screen_height = 1200
+        self.screen_height = 1080
         self.screen_color = (100, 100, 100)
         # Параметры изображений
         self.fire00 = pygame.image.load(resource_path('media/fire00.png'))

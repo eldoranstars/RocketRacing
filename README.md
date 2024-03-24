@@ -8,6 +8,7 @@
 - основной цикл игры game.py;
 - все игровые ф-ции game_functions.py;
 - все параметры игры settings.py;
+- все настройки состояния stats.py;
 - все классы в rects;
 - Python 3.8.10
 
