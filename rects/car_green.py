@@ -30,27 +30,30 @@ class CarGreen():
             self.fire_surface = self.settings.fire00
             self.crash_reload = 0
             self.crash = False
-        # учитываем скорость с нитро
-        if self.surface == self.settings.car_green_surface or self.surface == self.settings.boat_green_surface:
-            if self.nitro_reload < self.nitro_timer:
-                self.settings.max_speed_car_green = 33
-                self.settings.sf_car_green = 1
-                self.nitro_reload += 1
-            else:
+        # проверяем таймер нитро
+        if self.nitro_reload < self.nitro_timer:
+            self.nitro_reload += 1
+        if self.nitro_reload > self.nitro_timer:
+            if self.surface == self.settings.car_green_surface or self.surface == self.settings.boat_green_surface:
                 self.settings.max_speed_car_green = 22
                 self.settings.sf_car_green = 0.3
                 self.nitro_reload = 0
                 self.nitro_timer = 0
-        if self.surface == self.settings.car_green_long_surface or self.surface == self.settings.boat_green_long_surface:
-            if self.nitro_reload < self.nitro_timer:
-                self.settings.max_speed_car_green = 39
-                self.settings.sf_car_green = 0.72
-                self.nitro_reload += 1
-            else:
+            if self.surface == self.settings.car_green_long_surface or self.surface == self.settings.boat_green_long_surface:
                 self.settings.max_speed_car_green = 26
                 self.settings.sf_car_green = 0.24
                 self.nitro_reload = 0
                 self.nitro_timer = 0
+
+    # подбираем нитро
+    def take_nitro(self):
+        self.nitro_timer += 60
+        if self.surface == self.settings.car_green_surface or self.surface == self.settings.boat_green_surface:
+            self.settings.max_speed_car_green = 33
+            self.settings.sf_car_green = 0.9
+        if self.surface == self.settings.car_green_long_surface or self.surface == self.settings.boat_green_long_surface:
+            self.settings.max_speed_car_green = 39
+            self.settings.sf_car_green = 0.72
 
     # Исходная позиция
     def new_game(self):

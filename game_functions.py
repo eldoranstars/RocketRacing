@@ -332,10 +332,10 @@ def update_rects(stats):
         nitro.update()
         if overlap_left(car_red, nitro):
             nitro.rdy_remove = True
-            car_red.nitro_timer += 60
+            car_red.take_nitro()
         if overlap_right(car_green, nitro):
             nitro.rdy_remove = True
-            car_green.nitro_timer += 60
+            car_green.take_nitro()
     for truck in settings.trucks:
         truck.update()
         if overlap_left(car_red, truck):
