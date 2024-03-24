@@ -11,6 +11,7 @@ from position import Position
 from oil import Oil
 from nitro import Nitro
 from truck import Truck
+from mine import Mine
 from finish import Finish
 from tractor_move_right import RTractor
 from tractor_move_left import LTractor
@@ -347,6 +348,19 @@ def update_rects(stats):
             car_green.crash = True
             car_green.bang = True
             truck.rdy_remove = True
+    for mine in settings.mines:
+        mine.update()
+        if mine.rdy_blowup:
+            if overlap_left(car_red, mine):
+                settings.speed_car_red = 0
+                car_red.crash = True
+                car_red.bang = True
+                mine.rdy_remove = True
+            if overlap_right(car_green, mine):
+                settings.speed_car_green = 0
+                car_green.crash = True
+                car_green.bang = True
+                mine.rdy_remove = True
 
 # добавляем объекты в списки
 def append_rects():
@@ -375,6 +389,11 @@ def append_rects():
         truck = Truck(screen, settings)
         settings.trucks.append(truck)
         settings.truck_chance_increment += 2000
+    mine_chance_to_appear = (max_distance - settings.mine_chance_increment) / 100
+    if random.randrange(0,100) < mine_chance_to_appear and road.surface == settings.ocean_surface:
+        mine = Mine(screen, settings)
+        settings.mines.append(mine)
+        settings.mine_chance_increment += 1000
 
 # Обновить расположение объектов на экране.
 def update_title_text():
@@ -397,6 +416,8 @@ def remove_rects():
         nitro.remove()
     for truck in settings.trucks:
         truck.remove()
+    for mine in settings.mines:
+        mine.remove()
     for tractor in settings.tractors_move_right:
         tractor.remove()
     for tractor in settings.tractors_move_left:
@@ -413,6 +434,8 @@ def blit_screen():
         oil.blitme()
     for nitro in settings.nitros:
         nitro.blitme()
+    for mine in settings.mines:
+        mine.blitme()
     for tractor in settings.tractors_move_right:
         tractor.blitme()
     for tractor in settings.tractors_move_left:
