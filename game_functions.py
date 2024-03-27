@@ -66,7 +66,7 @@ def music_control():
         settings.music_active = True
         pygame.mixer.unpause()
 
-def swtich_to_ocean():
+def switch_to_ocean():
     road.surface = settings.ocean_surface
     settings.screen_color = (0, 66, 88)
     settings.truck_surface = settings.boat_surface
@@ -77,7 +77,7 @@ def swtich_to_ocean():
     position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
     position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
 
-def swtich_to_asphalt():
+def switch_to_asphalt():
     road.surface = settings.road_surface
     settings.screen_color = (100, 100, 100)
     settings.truck_surface = settings.ambulance_surface
@@ -114,13 +114,13 @@ def switch_theme(event):
             car_green.surface = settings.boat_green_surface
         position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
     if event.key == pygame.K_a:
-        swtich_to_asphalt()
+        switch_to_asphalt()
     if event.key == pygame.K_d:
-        swtich_to_ocean()
+        switch_to_ocean()
     if event.key == pygame.K_LEFT:
-        swtich_to_asphalt()
+        switch_to_asphalt()
     if event.key == pygame.K_RIGHT:
-        swtich_to_ocean()
+        switch_to_ocean()
 
 def switch_theme_joystick_zero(joystick_zero):
     if joystick_zero.get_hat(0)[1] == 1:
@@ -136,9 +136,9 @@ def switch_theme_joystick_zero(joystick_zero):
             car_red.surface = settings.boat_red_surface
         position.surface_left = pygame.transform.scale(car_red.surface, (25,25))
     if joystick_zero.get_hat(0)[0] == -1:
-        swtich_to_asphalt()
+        switch_to_asphalt()
     if joystick_zero.get_hat(0)[0] == 1:
-        swtich_to_ocean()
+        switch_to_ocean()
 
 def switch_theme_joystick_one(joystick_one):
     if joystick_one.get_hat(0)[1] == 1:
@@ -154,9 +154,9 @@ def switch_theme_joystick_one(joystick_one):
             car_green.surface = settings.boat_green_surface
         position.surface_right = pygame.transform.scale(car_green.surface, (25,25))
     if joystick_one.get_hat(0)[0] == -1:
-        swtich_to_asphalt()
+        switch_to_asphalt()
     if joystick_one.get_hat(0)[0] == 1:
-        swtich_to_ocean()
+        switch_to_ocean()
 
 # отслеживание нажатий клавиатуры и джойстика.
 def events_not_game_active(stats, joystick_zero, joystick_one):
